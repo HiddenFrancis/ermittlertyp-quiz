@@ -1,0 +1,8 @@
+# Nur index.html + img/ gehören auf GitHub Pages.
+# Interne / große / lokale Dateien NICHT veröffentlichen:
+Illu/
+files.zip
+sharepic_beispiel.png
+WEITER_IN_CODE.md
+*.bat
+.claude/

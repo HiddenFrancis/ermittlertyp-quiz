@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcher Ermittlertyp bist du? — Hidden Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Open+Sans:wght@400;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#000000;
+    --ink:#0d0d0c;
+    --cork:#3c372d;
+    --paper:#f5f0d2;
+    --tape:#f5dc24;
+    --green:#b4dc41;
+    --red:#a02d32;
+    --text:#f2efe4;
+    --muted:#9a958a;
+    --line:rgba(245,240,210,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--black);
+    color:var(--text);
+    font-family:"Open Sans",system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    min-height:100%;
+    /* subtle evidence-board grain */
+    background-image:radial-gradient(circle at 20% 10%, rgba(60,55,45,.35), transparent 55%),
+                     radial-gradient(circle at 85% 90%, rgba(60,55,45,.30), transparent 50%);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:660px;margin:0 auto;padding:18px 18px 64px;min-height:100%;display:flex;flex-direction:column}
+
+  /* ---------- top bar ---------- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .wordmark{font-family:"Oswald";font-weight:700;letter-spacing:.16em;font-size:13px;color:var(--text);text-transform:uppercase;opacity:.85}
+  .wordmark span{color:var(--green)}
+  .langs{display:flex;gap:4px;flex-wrap:wrap}
+  .langs button{
+    font-family:"Oswald";font-weight:600;font-size:12px;letter-spacing:.08em;
+    background:transparent;color:var(--muted);border:1px solid var(--line);
+    padding:5px 8px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:.15s;
+  }
+  .langs button:hover{color:var(--text);border-color:var(--muted)}
+  .langs button.active{background:var(--tape);color:#000;border-color:var(--tape)}
+
+  /* ---------- police tape (signature) ---------- */
+  .tape{
+    position:relative;background:var(--tape);color:#000;
+    font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+    padding:9px 14px;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    border-top:2px solid rgba(0,0,0,.55);border-bottom:2px solid rgba(0,0,0,.55);
+    box-shadow:0 6px 18px rgba(0,0,0,.5);
+  }
+  .tape.skew{transform:rotate(-1.4deg)}
+
+  .pending{
+    background:var(--cork);color:var(--paper);border:1px dashed var(--green);
+    font-size:12.5px;padding:8px 12px;border-radius:4px;margin-bottom:16px;
+    font-family:"Open Sans";display:none;
+  }
+  .pending.show{display:block}
+
+  /* ---------- generic card ---------- */
+  .card{
+    background:linear-gradient(180deg,#141310,#0c0b09);
+    border:1px solid var(--line);border-radius:8px;padding:22px 20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+  .stage{flex:1;display:flex;flex-direction:column;justify-content:center}
+
+  /* ---------- intro ---------- */
+  .intro-tape{margin-bottom:22px}
+  h1{
+    font-family:"Oswald";font-weight:700;text-transform:uppercase;line-height:.98;
+    font-size:clamp(34px,9vw,58px);letter-spacing:.01em;margin:6px 0 4px;
+  }
+  h1 .y{color:var(--tape)}
+  .kicker{font-family:"Caveat";font-weight:700;color:var(--green);font-size:26px;line-height:1;margin-bottom:18px;transform:rotate(-2deg)}
+  .lead{color:var(--text);opacity:.86;font-size:16px;max-width:48ch;margin-bottom:14px}
+  .sig{font-family:"Caveat";font-weight:700;color:var(--tape);font-size:23px;transform:rotate(-1.5deg);margin:0 0 26px;text-align:right;max-width:48ch}
+  .hahnke-note{font-family:"Open Sans";font-style:italic;font-size:14.5px;line-height:1.5;color:var(--text);opacity:.92;border-left:3px solid var(--tape);background:rgba(245,220,36,.05);padding:11px 13px;border-radius:4px;margin:22px 0 2px}
+  .meta{font-family:"Oswald";font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:30px}
+
+  .btn{
+    font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:16px;
+    background:var(--tape);color:#000;border:none;padding:15px 26px;border-radius:5px;cursor:pointer;
+    transition:transform .12s, box-shadow .12s, background .15s;box-shadow:0 6px 0 #b9a614;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:translateY(3px);box-shadow:0 3px 0 #b9a614}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--muted);box-shadow:none}
+  .btn.ghost:hover{border-color:var(--green);color:var(--green)}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:0 6px 0 #b9a614}
+
+  /* ---------- quiz ---------- */
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .qcount{font-family:"Oswald";font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--tape);white-space:nowrap}
+  .bar{flex:1;height:8px;background:rgba(245,240,210,.1);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:var(--green);transition:width .35s ease}
+  .qno{font-family:"Caveat";font-weight:700;color:var(--muted);font-size:20px;transform:rotate(-3deg);margin:14px 0 2px}
+  .question{font-family:"Oswald";font-weight:600;font-size:clamp(22px,5.5vw,30px);line-height:1.12;text-transform:none;margin-bottom:20px}
+  .opts{display:flex;flex-direction:column;gap:11px}
+  .opt{
+    text-align:left;background:#100f0d;border:1px solid var(--line);border-left:4px solid var(--cork);
+    color:var(--text);font-family:"Open Sans";font-size:15.5px;padding:14px 16px;border-radius:6px;cursor:pointer;
+    transition:.14s;display:flex;gap:12px;align-items:flex-start;
+  }
+  .opt:hover{border-color:var(--muted);background:#16140f}
+  .opt .tag{font-family:"Oswald";font-weight:700;color:var(--muted);font-size:14px;flex:0 0 auto;line-height:1.5}
+  .opt.sel{border-color:var(--green);border-left-color:var(--green);background:rgba(180,220,65,.08)}
+  .opt.sel .tag{color:var(--green)}
+  .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
+
+  /* ---------- result ---------- */
+  .stamp{
+    align-self:flex-start;border:3px solid var(--red);color:var(--red);
+    font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:14px;
+    padding:6px 12px;border-radius:4px;transform:rotate(-7deg);opacity:.92;margin-bottom:14px;
+  }
+  .res-label{font-family:"Oswald";font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:4px}
+  .res-name{font-family:"Oswald";font-weight:700;text-transform:uppercase;line-height:1;font-size:clamp(30px,8vw,46px);color:var(--tape);margin-bottom:6px}
+  .res-tag{font-family:"Caveat";font-weight:700;font-size:25px;color:var(--green);transform:rotate(-1.5deg);margin-bottom:20px}
+  .portrait{
+    width:128px;height:128px;flex:0 0 auto;border:2px solid var(--line);background:
+      repeating-linear-gradient(45deg,#15140f,#15140f 8px,#100f0c 8px,#100f0c 16px);
+    border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;
+    box-shadow:0 8px 20px rgba(0,0,0,.5);
+  }
+  .portrait::before{content:"?";font-family:"Oswald";font-weight:700;font-size:48px;color:var(--muted)}
+  .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:5px;display:block}
+  .portrait .pin{z-index:2}
+  .portrait.has-img{background:none}
+  .portrait.has-img::before{content:none}
+  .portrait small{position:absolute;bottom:-22px;left:0;right:0;font-family:"Caveat";font-size:16px;color:var(--muted)}
+  .intro-portrait{margin:6px auto 28px}
+  .pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+  .res-top{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-bottom:24px}
+  .res-body{flex:1;min-width:220px}
+  .res-desc{font-size:15.5px;opacity:.9;margin-bottom:18px}
+  .block-label{font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--green);margin-bottom:6px}
+  .colleagues{font-size:15px;color:var(--text);opacity:.88;margin-bottom:24px;font-style:italic}
+
+  .casecard{
+    position:relative;background:var(--paper);color:#1c1a15;border-radius:6px;padding:18px 18px 20px;
+    box-shadow:0 10px 26px rgba(0,0,0,.5);transform:rotate(-.6deg);margin-top:8px;
+  }
+  .casecard .ribbon{position:absolute;top:10px;right:-6px;background:var(--red);color:#fff;font-family:"Oswald";font-weight:700;
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;transform:rotate(3deg);box-shadow:0 3px 8px rgba(0,0,0,.4)}
+  .casecard .ct-label{font-family:"Oswald";font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--red);margin-bottom:4px}
+  .casecard .ct-title{font-family:"Oswald";font-weight:700;font-size:22px;line-height:1.05;margin-bottom:6px}
+  .casecard .ct-blurb{font-size:14.5px;line-height:1.5}
+  .share-hint{font-family:"Open Sans";font-size:13.5px;line-height:1.5;color:var(--text);opacity:.92;background:rgba(180,220,65,.07);border-left:3px solid var(--green);padding:11px 13px;border-radius:4px;margin:26px 0 4px}
+  .card-preview-wrap{display:flex;justify-content:center;margin:16px 0 4px;min-height:40px}
+  #cardPreview{width:100%;max-width:300px;border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.55);opacity:0;transition:opacity .35s}
+  #cardPreview.ready{opacity:1}
+  .res-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .buy-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+  .btn.buy{background:var(--green);color:#0a0a09;box-shadow:0 6px 0 #7a9a22;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn.buy:active{transform:translateY(3px);box-shadow:0 3px 0 #7a9a22}
+  .btn.buy.ghost{background:transparent;color:var(--green);border:1px solid var(--green);box-shadow:none}
+  .copied{font-family:"Caveat";font-weight:700;color:var(--green);font-size:18px;align-self:center;display:none}
+  .copied.show{display:inline}
+
+  .hidden{display:none !important}
+
+  @media (max-width:420px){
+    .res-top{gap:16px}
+    .portrait{width:104px;height:104px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important}
+  }
+  /* keyboard focus */
+  button:focus-visible,.opt:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="wordmark">HIDDEN<span>GAMES</span></div>
+    <nav class="langs" id="langs" aria-label="Sprache"></nav>
+  </div>
+
+  <div class="pending" id="pending"></div>
+
+  <div class="stage">
+
+    <!-- ===== INTRO ===== -->
+    <section id="screen-intro" class="card">
+      <div class="tape skew intro-tape" id="introTape">— TATORT — ZUTRITT NUR FÜR ERMITTLER —</div>
+      <div class="kicker" id="introKicker"></div>
+      <h1 id="introTitle"></h1>
+      <p class="lead" id="introLead"></p>
+      <div class="sig" id="introSig"></div>
+      <div class="meta" id="introMeta"></div>
+      <div class="portrait intro-portrait" id="introPic"><span class="pin"></span><small id="introPicNote"></small></div>
+      <button class="btn" id="startBtn"></button>
+    </section>
+
+    <!-- ===== QUIZ ===== -->
+    <section id="screen-quiz" class="card hidden">
+      <div class="progress-row">
+        <span class="qcount" id="qcount"></span>
+        <span class="bar"><i id="barfill"></i></span>
+      </div>
+      <div class="qno" id="qno"></div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <button class="btn ghost" id="backBtn"></button>
+        <button class="btn" id="nextBtn"></button>
+      </div>
+    </section>
+
+    <!-- ===== RESULT ===== -->
+    <section id="screen-result" class="card hidden">
+      <div class="stamp" id="stamp"></div>
+      <div class="res-label" id="resLabel"></div>
+      <div class="res-name" id="resName"></div>
+      <div class="res-tag" id="resTag"></div>
+      <div class="res-top">
+        <div class="portrait" id="resultPortrait"><span class="pin"></span><small id="portraitNote"></small></div>
+        <div class="res-body">
+          <div class="res-desc" id="resDesc"></div>
+          <div class="block-label" id="collLabel"></div>
+          <div class="colleagues" id="resColl"></div>
+        </div>
+      </div>
+      <div class="hahnke-note" id="resHahnke"></div>
+      <div class="casecard" id="caseCard">
+        <span class="ribbon" id="caseRibbon"></span>
+        <div class="ct-label" id="caseLabel"></div>
+        <div class="ct-title" id="caseTitle"></div>
+        <div class="ct-blurb" id="caseBlurb"></div>
+      </div>
+      <div class="buy-actions" id="buyActions"></div>
+      <div class="share-hint" id="shareHint"></div>
+      <div class="card-preview-wrap"><img id="cardPreview" alt=""></div>
+      <div class="res-actions">
+        <button class="btn" id="saveBtn"></button>
+        <button class="btn ghost" id="shareImgBtn" hidden></button>
+        <button class="btn ghost" id="captionBtn"></button>
+      </div>
+      <div class="res-actions">
+        <button class="btn ghost" id="restartBtn"></button>
+        <span class="copied" id="copied"></span>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   ERMITTLERTYP-TEST — Gerüst (Step 1)
+   - Eine Datei, kein Build. Für GitHub Pages.
+   - Mehrsprachig über Wörterbuch. Logik ist sprachunabhängig (siehe Q).
+   - PLATZHALTER: Fälle (CASES-Texte) + Karikaturen + Kollegen pro Markt.
+   ========================================================================= */
+
+/* ---- 1) SCORING (sprachunabhängig) -------------------------------------
+   Pro Frage 4 Optionen. Schlüssel = Typ-ID (1..7) oder 'r' = Rex.
+   Reihenfolge muss zu den Texten in i18n[..].q passen. */
+const Q = [
+  [ {6:2,1:1}, {2:2},     {3:2},      {4:2,r:1} ],
+  [ {1:2},     {6:2},     {3:2,2:1},  {4:1,r:2} ],
+  [ {2:2,6:1}, {4:2},     {7:2,1:1},  {5:1,4:1,r:1} ],
+  [ {5:2},     {2:2,3:1}, {6:2,1:1},  {3:2} ],
+  [ {1:2},     {3:2,2:1}, {7:2},      {r:2,4:1} ],
+  [ {2:2},     {4:2,1:1}, {5:2,7:1},  {3:2} ],
+  [ {7:2,1:1}, {3:2,7:1}, {5:2,4:1},  {r:2,7:1} ],
+  [ {1:2,2:1}, {3:2},     {5:2},      {7:2} ],
+  [ {1:2},     {6:2},     {4:2,r:1},  {7:2} ],
+];
+const REX_THRESHOLD = 6;          // ab so vielen Rex-Punkten gewinnt der Hund
+const TIE_ORDER = [1,2,3,4,5,6,7];// Tie-Break-Reihenfolge
+
+/* ---- 2) WÖRTERBUCH ------------------------------------------------------ */
+const i18n = {
+  de:{
+    pending:false,
+    tape:"— TATORT — ZUTRITT NUR FÜR ERMITTLER —",
+    kicker:"Kommissar Hahnke übernimmt",
+    title:['Welcher ','Ermittlertyp',' bist du?'],
+    lead:"Sie wollen also in mein Ermittlerteam. Mutig. Neun Fragen, dann weiß ich, was für ein Ermittlertyp in Ihnen steckt — und welcher meiner Fälle zu Ihnen passt. Gelöst hätte ich ihn auch ohne Sie, versteht sich. Aber sehen wir mal, ob Sie mithalten.",
+    sig:"— Kommissar G. Hahnke",
+    hahnke:"Mein Urteil: brauchbar. Für Ihre Verhältnisse sogar überraschend brauchbar. Und ich hätte da auch schon den passenden Fall für Sie.",
+    meta:"9 Fragen · ca. 3 Minuten",
+    host:"Kommissar Hahnke",
+    start:"Ermittlung starten",
+    qcount:"Frage %1 / %2",
+    qno:"Akte Nr. %1",
+    back:"Zurück",
+    next:"Weiter",
+    finish:"Fall lösen",
+    stamp:"Akte geschlossen",
+    resLabel:"Dein Ermittlertyp",
+    portraitNote:"Karikatur folgt",
+    collLabel:"Deine Kollegen im Geiste",
+    caseLabel:"Dein perfekter Fall",
+    caseRibbon:"Empfohlen",
+    restart:"Nochmal ermitteln",
+    share:"Test weiterempfehlen",
+    copied:"Link kopiert!",
+    saveImg:"Als Bild speichern",
+    shareImg:"Teilen",
+    copyCaption:"Caption kopieren",
+    captionCopied:"Caption kopiert!",
+    shareHint:"Lade dein Ergebnis herunter und poste es in deine Story — markiere @hiddengames_original mit #HiddenGamesErmittler, und wir reposten die besten Ermittler!",
+    cardKicker:"Mein Ermittlertyp",
+    cardCta:"Jetzt selbst testen:",
+    caption:"Ich bin %name! 🕵️ Welcher Ermittlertyp bist du? Mach den Test und finde deinen perfekten Fall. #HiddenGamesErmittler @hiddengames_original",
+    amazonBtn:"Bei Amazon kaufen",
+    shopBtn:"Im Hidden-Games-Shop kaufen",
+    q:[
+      {q:"Ein neuer Fall landet auf deinem Schreibtisch. Was tust du zuerst?",
+       a:["Die Akte von vorn bis hinten lesen und jedes Detail markieren.",
+          "Mich fragen: Wer profitiert? Ich denke mich in die Köpfe hinein.",
+          "Erst mal zuhören, was die Leute drumherum so erzählen.",
+          "Jacke an, raus an den Tatort. Gefühl schlägt Papier."]},
+      {q:"Du stehst am Tatort. Worauf fällt dein Blick zuerst?",
+       a:["Die winzige Unstimmigkeit, die sonst niemand bemerkt.",
+          "Die Spuren — Fasern, Abdrücke, alles wird gesichert.",
+          "Die Gesichter der Umstehenden. Menschen verraten sich.",
+          "Etwas in der Luft. Irgendwas stimmt hier ganz und gar nicht."]},
+      {q:"Wie sieht dein Schreibtisch aus?",
+       a:["Penibel sortiert, jedes Beweisstück beschriftet.",
+          "Ein kreatives Chaos — aber ich finde alles blind.",
+          "Eine Pinnwand voller Fotos und roter Fäden.",
+          "Welcher Schreibtisch? Ich bin sowieso lieber draußen."]},
+      {q:"Wie verhörst du einen Verdächtigen?",
+       a:["Charmant. Ein Lächeln öffnet mehr Türen als Druck.",
+          "Geduldig. Ich warte, bis er sich selbst widerspricht.",
+          "Mit Fakten. Ich lege die Beweise auf den Tisch.",
+          "Wortkarg. Ich beobachte einfach, wie er reagiert."]},
+      {q:"Was ist dein größtes Talent?",
+       a:["Logische Schlüsse, die andere für Zauberei halten.",
+          "Ich lese Menschen wie ein offenes Buch.",
+          "Ich gebe niemals auf — egal, was es kostet.",
+          "Ich rieche eine Lüge, bevor sie ausgesprochen ist."]},
+      {q:"Ein Kollege baut Mist. Wie reagierst du?",
+       a:["Ich erkläre ihm ruhig und genau, was schiefgelaufen ist.",
+          "Ich übernehme den Fall dann eben selbst.",
+          "Ich decke ihn — Team ist Team.",
+          "Ich hab's längst kommen sehen und sage nichts."]},
+      {q:"Was treibt dich wirklich an?",
+       a:["Die Wahrheit. Ganz einfach.",
+          "Gerechtigkeit für die, die sonst niemand sieht.",
+          "Der Nervenkitzel. Die Jagd.",
+          "Loyalität. Ich bin für meine Leute da."]},
+      {q:"Welche Rolle spielst du im Team?",
+       a:["Der Kopf, der den Fall am Ende löst.",
+          "Die unscheinbare Person, die alle unterschätzen.",
+          "Das Charme-Talent, das jede Tür öffnet.",
+          "Die besessene Seele, die nachts noch im Büro sitzt."]},
+      {q:"Und wie löst du den Fall am Ende?",
+       a:["Mit einer brillanten Schlusskette, Schritt für Schritt.",
+          "Mit einem Detail aus dem Labor, das alles dreht.",
+          "Mit einem Bauchgefühl, das goldrichtig liegt.",
+          "Indem ich einfach nicht lockergelassen habe."]},
+    ],
+    types:{
+      1:{name:"Die Deduktions-Maschine", tag:"Logik ist deine Superkraft.",
+         desc:"Du siehst, was andere übersehen, und fügst die Splitter zu einem glasklaren Bild. Wo andere raten, schließt du. Kalt, präzise, unbestechlich.",
+         coll:"Sherlock Holmes & Auguste Dupin"},
+      2:{name:"Die kleinen grauen Zellen", tag:"Ordnung, Methode — und ein gutes Ego.",
+         desc:"Du löst Fälle nicht durch Herumrennen, sondern durch Nachdenken. Du verstehst Motive, durchschaust Menschen und genießt den großen Auftritt bei der Auflösung.",
+         coll:"ein gewisser belgischer Gentleman mit Schnurrbart 🤫"},
+      3:{name:"Kommissarin Karla Nagel", tag:"Ruhe ist deine schärfste Waffe.",
+         desc:"Du musst nicht laut werden, um zu überzeugen. Du hörst zu, bevor du urteilst, hältst mehrere Möglichkeiten offen und bringst Menschen zum Reden, wo andere sie nur einschüchtern würden. Fair, souverän, unbestechlich — und am Ende erstaunlich oft die mit der richtigen Antwort.",
+         coll:"Pater Brown & die ruhigen Menschenkenner, die erst zuhören und dann urteilen"},
+      4:{name:"Kommissarin Katrin Lievers", tag:"Klartext statt Samthandschuhe.",
+         desc:"Du nimmst kein Blatt vor den Mund und gehst Fällen frontal an. Wo andere zögern, redest du Klartext und vertraust deinem Gespür für den wahren Schuldigen. Zweifel lässt du selten zu — wozu auch, du liegst ja meistens richtig. Meistens.",
+         coll:"die kompromisslosen Verhör-Profis, vor denen jeder Verdächtige ins Schwitzen gerät"},
+      5:{name:"Der charmante Gentleman", tag:"Ein Lächeln öffnet jede Tür.",
+         desc:"Du ermittelst mit Stil. Charme, Schlagfertigkeit und ein Hauch Grauzone bringen dich weiter als jede Brechstange. Niemand sieht dich kommen — sie sehen nur das Lächeln.",
+         coll:"Arsène Lupin"},
+      6:{name:"Die forensische Spürnase", tag:"Die Beweise lügen nie.",
+         desc:"Eine Faser, ein Abdruck, ein winziges Detail — für dich ist das die ganze Geschichte. Du bist geduldig, akribisch und vertraust nur dem, was du belegen kannst.",
+         coll:"die Profis aus der Spurensicherung"},
+      7:{name:"Die Getriebene", tag:"Loslassen? Kennst du nicht.",
+         desc:"Ein Fall wird für dich zur Mission. Du sitzt nachts noch über den Akten, folgst jedem roten Faden und hörst erst auf, wenn die Wahrheit auf dem Tisch liegt.",
+         coll:"die getriebenen Ermittlerinnen des hohen Nordens"},
+    },
+    rex:{name:"Der vierbeinige Kollege", tag:"Du löst Fälle mit dem Bauch — und der Nase.",
+         desc:"Reden? Überbewertet. Du verlässt dich auf Instinkt, Loyalität und einen Spürsinn, gegen den jede Lupe alt aussieht. Der heimliche Star jeder Ermittlung.",
+         coll:"ein legendärer Schäferhund im Polizeidienst 🐾"},
+    cases:{
+      1:{title:"Tödliche Überfahrt", blurb:"Eine Leiche und ein verbranntes Gemälde auf einer Privatyacht nach London — ein geschlossener Schauplatz, den man nur durch eiskaltes Kombinieren knackt. Genau dein Fall."},
+      2:{title:"Ein perfekter Plan", blurb:"Ein toter Häftling, zwielichtiges Personal und lauter verborgene Pläne hinter Gittern — wer hier durchblickt, denkt wie du: einen Zug voraus."},
+      3:{title:"Eiskaltes Verbrechen", blurb:"Der Fall von Kommissarin Nagel: Auf dem Bärenfelder Weihnachtsmarkt stirbt ein Schauspieler mitten im Krippenspiel — in aller Öffentlichkeit. Genau der Fall für dein ruhiges Gespür für Menschen."},
+      4:{title:"Grünes Gift", blurb:"Der Fall von Kommissarin Lievers: eine angespülte Leiche, ein blitzschnell verhafteter Verdächtiger. Aber sitzt wirklich der Richtige ein? Ein Fall für jemanden, der Klartext redet — und trotzdem zweimal hinschaut."},
+      5:{title:"Das Diadem der Madonna", blurb:"Ein dreister Museumsraub, eine rätselhafte Nachricht, eine Live-Verfolgung — ein eleganter Fall mit Stil, ganz nach deinem Geschmack."},
+      6:{title:"Glutspur", blurb:"Im Stahlwerk verschwinden Menschen, ein gestohlenes Objekt taucht auf, eine heiße Spur führt durchs Feuer. Knifflige Rätsel und ein Experiment inklusive — hier zählt nur, was du beweisen kannst."},
+      7:{title:"Schatten der Zeit", blurb:"Ein vor 80 Jahren gesunkenes Schiff, eine zerteilte Taschenuhr, ein Junge auf der Suche nach seiner Familie — ein emotionaler Fall, der dich nicht mehr loslässt."},
+      rex:{title:"Reif für die Insel", blurb:"Ein verschwundener Bürgermeister, ein toter Polizist und jede Menge Humor — ein Inselfall mit Polizei-Chat und GPS-Spur, bei dem dein Riecher Gold wert ist."},
+    }
+  },
+
+  en:{
+    pending:false,
+    tape:"— CRIME SCENE — INVESTIGATORS ONLY —",
+    kicker:"Detective Roberts takes over",
+    title:['What kind of ','detective',' are you?'],
+    lead:"So you want to join my investigative team. Bold. Nine questions, and I'll know exactly what kind of detective you are. I'd have cracked the case without you, naturally. But let's see if you can keep up.",
+    sig:"— Detective M. Roberts",
+    hahnke:"My verdict: usable. For your level, surprisingly usable. Welcome to the team.",
+    meta:"9 questions · about 3 minutes",
+    host:"Detective Roberts",
+    start:"Start the investigation",
+    qcount:"Question %1 / %2",
+    qno:"Case file No. %1",
+    back:"Back",
+    next:"Next",
+    finish:"Crack the case",
+    stamp:"Case closed",
+    resLabel:"Your detective type",
+    portraitNote:"caricature coming",
+    collLabel:"Your kindred spirits",
+    caseLabel:"Your perfect case",
+    caseRibbon:"Recommended",
+    restart:"Investigate again",
+    share:"Share the test",
+    copied:"Link copied!",
+    saveImg:"Save as image",
+    shareImg:"Share",
+    copyCaption:"Copy caption",
+    captionCopied:"Caption copied!",
+    shareHint:"Download your result and post it to your story — tag @hiddengames_international with #HiddenGamesErmittler and we'll repost our favourite detectives!",
+    cardKicker:"My detective type",
+    cardCta:"Take the test:",
+    caption:"I'm %name! 🕵️ What kind of detective are you? Take the test and find your perfect case. #HiddenGamesErmittler @hiddengames_international",
+    amazonBtn:"Buy on Amazon",
+    q:[
+      {q:"A new case lands on your desk. What do you do first?",
+       a:["Read the file cover to cover and flag every detail.",
+          "Ask myself: who benefits? I get inside their heads.",
+          "Listen first to what the people around it are saying.",
+          "Grab my coat and head to the scene. Gut beats paper."]},
+      {q:"You're at the crime scene. What catches your eye first?",
+       a:["The tiny inconsistency nobody else notices.",
+          "The traces — fibres, prints, everything gets bagged.",
+          "The faces of the bystanders. People give themselves away.",
+          "Something in the air. Something here is badly off."]},
+      {q:"What does your desk look like?",
+       a:["Meticulously sorted, every piece of evidence labelled.",
+          "Creative chaos — but I can find anything blindfolded.",
+          "A pinboard full of photos and red string.",
+          "What desk? I'd rather be out in the field anyway."]},
+      {q:"How do you question a suspect?",
+       a:["With charm. A smile opens more doors than pressure.",
+          "Patiently. I wait until they contradict themselves.",
+          "With facts. I lay the evidence on the table.",
+          "Sparingly. I just watch how they react."]},
+      {q:"What's your greatest talent?",
+       a:["Logical deductions others mistake for magic.",
+          "I read people like an open book.",
+          "I never give up — whatever it costs.",
+          "I smell a lie before it's even spoken."]},
+      {q:"A colleague messes up. How do you react?",
+       a:["I calmly explain exactly what went wrong.",
+          "I just take over the case myself.",
+          "I cover for them — team is team.",
+          "I saw it coming long ago and say nothing."]},
+      {q:"What really drives you?",
+       a:["The truth. Simple as that.",
+          "Justice for those nobody else sees.",
+          "The thrill. The chase.",
+          "Loyalty. I'm there for my people."]},
+      {q:"What's your role on the team?",
+       a:["The mind that solves the case in the end.",
+          "The unremarkable one everybody underestimates.",
+          "The charmer who gets through any door.",
+          "The obsessed soul still at the office at midnight."]},
+      {q:"And how do you crack it in the end?",
+       a:["With a brilliant chain of reasoning, step by step.",
+          "With one lab detail that turns everything around.",
+          "With a gut feeling that turns out spot on.",
+          "By simply never letting go."]},
+    ],
+    types:{
+      1:{name:"The Deduction Machine", tag:"Logic is your superpower.",
+         desc:"You see what others miss and assemble the fragments into a crystal-clear picture. Where others guess, you deduce. Cold, precise, incorruptible.",
+         coll:"Sherlock Holmes & Auguste Dupin"},
+      2:{name:"The Little Grey Cells", tag:"Order, method — and a healthy ego.",
+         desc:"You don't solve cases by running around but by thinking. You understand motives, see through people, and rather enjoy the big reveal.",
+         coll:"a certain Belgian gentleman with a moustache 🤫"},
+      3:{name:"The Quiet Observer", tag:"Underestimated — and dangerous for it.",
+         desc:"You say little and see everything. While others talk, you read glances, pauses and what nobody says aloud — listening first, judging later. By the end, you already know.",
+         coll:"Father Brown & the calm readers of people who listen first and judge later"},
+      4:{name:"Detective Malia Jackson", tag:"Plain talk, no kid gloves.",
+         desc:"You don't mince words and you take cases head-on. Where others hesitate, you cut straight to it and trust your instinct for the real culprit. You rarely allow doubt — why would you, you're usually right. Usually.",
+         coll:"the no-nonsense interrogators who make every suspect sweat"},
+      5:{name:"The Charming Gentleman", tag:"A smile opens every door.",
+         desc:"You investigate with style. Charm, wit and a hint of grey area get you further than any crowbar. Nobody sees you coming — they only see the smile.",
+         coll:"Arsène Lupin"},
+      6:{name:"The Forensic Bloodhound", tag:"The evidence never lies.",
+         desc:"A fibre, a print, a tiny detail — to you that's the whole story. You're patient, meticulous and trust only what you can prove.",
+         coll:"the pros from forensics"},
+      7:{name:"The Obsessed", tag:"Letting go? Not a thing you do.",
+         desc:"A case becomes a mission. You're still poring over files at night, following every red thread, stopping only when the truth is on the table.",
+         coll:"the driven detectives of the far north"},
+    },
+    rex:{name:"The Four-Legged Colleague", tag:"You solve cases with your gut — and your nose.",
+         desc:"Talking? Overrated. You rely on instinct, loyalty and a sense of smell that makes any magnifying glass look silly. The secret star of every investigation.",
+         coll:"a legendary police dog 🐾"},
+    cases:{
+      1:{title:"Tödliche Überfahrt", blurb:"A corpse and a burned painting aboard a private yacht bound for London — a sealed setting you crack only with cold, hard reasoning. Your kind of case."},
+      2:{title:"Ein perfekter Plan", blurb:"A dead inmate, shady staff and hidden agendas behind bars — cracking it takes someone who, like you, thinks a move ahead."},
+      3:{title:"Eiskaltes Verbrechen", blurb:"Detective Nagel's case: at the Bärenfelde Christmas market, an actor dies in the middle of the nativity play — in front of everyone. Exactly the case for your calm read of people."},
+      4:{title:"Grünes Gift", blurb:"Detective Lievers' case: a body washed ashore and a suspect arrested in record time. But is the right person behind bars? A case for someone who talks straight — yet still looks twice."},
+      5:{title:"Das Diadem der Madonna", blurb:"A brazen museum heist, a cryptic message, a live chase — an elegant case with style, right up your alley."},
+      6:{title:"Glutspur", blurb:"People vanish at a steelworks, a stolen object surfaces, a hot trail leads through the fire. Tricky puzzles and an experiment included — here only what you can prove counts."},
+      7:{title:"Schatten der Zeit", blurb:"A ship that sank 80 years ago, a pocket watch in two halves, a boy searching for his family — an emotional case that won't let you go."},
+      rex:{title:"Reif für die Insel", blurb:"A vanished mayor, a dead cop and a whole lot of humour — an island case with police chat and GPS trail where your nose is worth its weight in gold."},
+    }
+  },
+
+  /* IT / FR / ES: vollständig lokalisiert (UI, Fragen, Typen, Fälle). Fall-Titel aus den
+     echten Amazon-Listings (verifiziert); Typ-/Fall-Beschreibungen sind Quiz-Marketing,
+     hier lokalisiert. Hinweis: Fälle, die ein Markt via REC nie anzeigt (IT/FR: 6,7 ·
+     ES: 3,6,7), tragen einen sinngemäß übersetzten Platzhalter-Titel — nie im UI sichtbar. */
+  it:{pending:false, tape:"— SCENA DEL CRIMINE — SOLO INVESTIGATORI —", kicker:"Il commissario Gallo prende il comando",
+      title:['Che tipo di ','investigatore',' sei?'], meta:"9 domande · circa 3 minuti", start:"Inizia le indagini",
+      lead:"Quindi volete entrare nella mia squadra investigativa. Coraggiosi. Nove domande e saprò che tipo di investigatore siete — e quale dei miei casi fa per voi. L'avrei risolto anche senza di voi, ovviamente. Ma vediamo se riuscite a tenere il passo.",
+      sig:"— Commissario A. Gallo", hahnke:"Il mio verdetto: utilizzabili. Per i vostri standard, sorprendentemente utilizzabili. E ho già il caso giusto per voi.",
+      qcount:"Domanda %1 / %2", qno:"Fascicolo n. %1", back:"Indietro", next:"Avanti", finish:"Risolvi il caso",
+      stamp:"Caso chiuso", resLabel:"Il tuo tipo di investigatore", portraitNote:"caricatura in arrivo",
+      collLabel:"I tuoi spiriti affini", caseLabel:"Il tuo caso perfetto", caseRibbon:"Consigliato",
+      restart:"Indaga di nuovo", share:"Condividi il test", copied:"Link copiato!",
+      saveImg:"Salva come immagine", shareImg:"Condividi", copyCaption:"Copia didascalia", captionCopied:"Didascalia copiata!",
+      shareHint:"Scarica il risultato e pubblicalo nella tua storia — tagga @hiddengames_international con #HiddenGamesErmittler!",
+      cardKicker:"Il mio tipo di investigatore", cardCta:"Fai il test:",
+      caption:"Sono %name! 🕵️ Che tipo di investigatore sei? Fai il test e trova il tuo caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acquista su Amazon", host:"Commissario Gallo",
+      q:[
+       {q:"Un nuovo caso finisce sulla tua scrivania. Cosa fai per prima cosa?",
+        a:["Leggo il fascicolo da cima a fondo e segno ogni dettaglio.",
+           "Mi chiedo: a chi giova? Mi calo nella mente dei sospettati.",
+           "Prima ascolto cosa dicono le persone intorno al caso.",
+           "Giacca e via, sulla scena. L'istinto batte le scartoffie."]},
+       {q:"Sei sulla scena del crimine. Cosa noti per primo?",
+        a:["La minima incongruenza che nessun altro coglie.",
+           "Le tracce — fibre, impronte: si reperta tutto.",
+           "I volti dei presenti. Le persone si tradiscono da sole.",
+           "Qualcosa nell'aria. Qui c'è qualcosa che non torna affatto."]},
+       {q:"Com'è la tua scrivania?",
+        a:["Ordinata in modo maniacale, ogni prova etichettata.",
+           "Un caos creativo — ma trovo tutto a occhi chiusi.",
+           "Una bacheca piena di foto e fili rossi.",
+           "Quale scrivania? Tanto preferisco stare sul campo."]},
+       {q:"Come interroghi un sospettato?",
+        a:["Con fascino. Un sorriso apre più porte della pressione.",
+           "Con pazienza. Aspetto che si contraddica da solo.",
+           "Coi fatti. Metto le prove sul tavolo.",
+           "Con poche parole. Osservo soltanto come reagisce."]},
+       {q:"Qual è il tuo talento più grande?",
+        a:["Deduzioni logiche che gli altri scambiano per magia.",
+           "Leggo le persone come un libro aperto.",
+           "Non mollo mai — a qualunque costo.",
+           "Fiuto una bugia prima ancora che venga detta."]},
+       {q:"Un collega combina un guaio. Come reagisci?",
+        a:["Gli spiego con calma e precisione cosa è andato storto.",
+           "Mi prendo il caso e lo gestisco io.",
+           "Lo copro — la squadra è la squadra.",
+           "L'avevo previsto da un pezzo e non dico nulla."]},
+       {q:"Cosa ti spinge davvero?",
+        a:["La verità. Semplicemente.",
+           "La giustizia per chi nessun altro vede.",
+           "Il brivido. La caccia.",
+           "La lealtà. Ci sono per la mia gente."]},
+       {q:"Che ruolo hai nella squadra?",
+        a:["La mente che alla fine risolve il caso.",
+           "La persona insignificante che tutti sottovalutano.",
+           "Il talento affascinante che apre ogni porta.",
+           "L'anima ossessionata che di notte è ancora in ufficio."]},
+       {q:"E alla fine come risolvi il caso?",
+        a:["Con una brillante catena di deduzioni, passo dopo passo.",
+           "Con un dettaglio del laboratorio che ribalta tutto.",
+           "Con un istinto che si rivela azzeccatissimo.",
+           "Semplicemente non mollando mai la presa."]},
+      ],
+      types:{
+        1:{name:"La macchina della deduzione", tag:"La logica è il tuo superpotere.",
+           desc:"Vedi ciò che gli altri trascurano e unisci i frammenti in un quadro nitidissimo. Dove gli altri tirano a indovinare, tu deduci. Freddo, preciso, incorruttibile.",
+           coll:"Sherlock Holmes e Auguste Dupin"},
+        2:{name:"Le piccole cellule grigie", tag:"Ordine, metodo — e un sano ego.",
+           desc:"Non risolvi i casi correndo di qua e di là, ma ragionando. Capisci i moventi, leggi dentro le persone e ti godi il grande momento della rivelazione.",
+           coll:"un certo gentiluomo belga coi baffi 🤫"},
+        3:{name:"Commissaria Carla Nettuni", tag:"La calma è la tua arma più affilata.",
+           desc:"Non hai bisogno di alzare la voce per convincere. Ascolti prima di giudicare, tieni aperte più piste e fai parlare le persone dove altri si limiterebbero a intimidirle. Equa, sicura di sé, incorruttibile — e alla fine, sorprendentemente spesso, quella con la risposta giusta.",
+           coll:"Padre Brown e i tranquilli conoscitori dell'animo umano, che prima ascoltano e poi giudicano"},
+        4:{name:"Commissaria Caterina Olivieri", tag:"Parole chiare, niente guanti di velluto.",
+           desc:"Non le mandi a dire e affronti i casi di petto. Dove altri esitano, tu parli chiaro e ti fidi del tuo fiuto per il vero colpevole. Concedi raramente spazio al dubbio — e perché mai, tanto hai quasi sempre ragione. Quasi.",
+           coll:"gli implacabili professionisti dell'interrogatorio, davanti ai quali ogni sospettato suda freddo"},
+        5:{name:"Il gentiluomo affascinante", tag:"Un sorriso apre ogni porta.",
+           desc:"Indaghi con stile. Fascino, prontezza di spirito e un pizzico di zona grigia ti portano più lontano di qualsiasi piede di porco. Nessuno ti vede arrivare — vedono solo il sorriso.",
+           coll:"Arsène Lupin"},
+        6:{name:"Il segugio della scientifica", tag:"Le prove non mentono mai.",
+           desc:"Una fibra, un'impronta, un dettaglio minuscolo — per te è tutta la storia. Sei paziente, meticoloso e ti fidi solo di ciò che puoi dimostrare.",
+           coll:"i professionisti della scientifica"},
+        7:{name:"L'inarrestabile", tag:"Mollare? Non sai cosa significhi.",
+           desc:"Un caso diventa per te una missione. Di notte sei ancora sui fascicoli, segui ogni filo rosso e ti fermi solo quando la verità è sul tavolo.",
+           coll:"le tenaci investigatrici del profondo Nord"},
+      },
+      rex:{name:"Il collega a quattro zampe", tag:"Risolvi i casi con la pancia — e con il naso.",
+           desc:"Parlare? Sopravvalutato. Ti affidi a istinto, lealtà e un fiuto contro cui ogni lente d'ingrandimento fa una magra figura. La star segreta di ogni indagine.",
+           coll:"un leggendario pastore tedesco in servizio di polizia 🐾"},
+      cases:{
+        1:{title:"Traversata fatale", blurb:"Un cadavere e un dipinto bruciato a bordo di uno yacht privato diretto a Londra — uno scenario chiuso che si svela solo con un ragionamento glaciale. Proprio il tuo caso."},
+        2:{title:"Un piano perfetto", blurb:"Un detenuto morto, personale ambiguo e piani nascosti dietro le sbarre — chi ci vede chiaro qui ragiona come te: una mossa avanti."},
+        3:{title:"Delitto sotto la neve", blurb:"Il caso della commissaria Nettuni: al mercatino di Natale un attore muore nel bel mezzo del presepe vivente — davanti a tutti. Proprio il caso per il tuo sguardo calmo sulle persone."},
+        4:{title:"Veleno verde", blurb:"Il caso della commissaria Olivieri: un cadavere restituito dal mare, un sospettato arrestato in un lampo. Ma è davvero la persona giusta dietro le sbarre? Un caso per chi parla chiaro — e però guarda due volte."},
+        5:{title:"Il diadema di Mezzanotte", blurb:"Un furto sfrontato al museo, un messaggio enigmatico, un inseguimento in diretta — un caso elegante e di stile, proprio nelle tue corde."},
+        6:{title:"Scia incandescente", blurb:"All'acciaieria scompaiono persone, riaffiora un oggetto rubato, una pista rovente passa tra le fiamme. Enigmi intricati e un esperimento incluso — qui conta solo ciò che puoi dimostrare."},
+        7:{title:"Le ombre del tempo", blurb:"Una nave affondata 80 anni fa, un orologio da tasca spezzato in due, un ragazzo in cerca della sua famiglia — un caso emozionante che non ti molla più."},
+        rex:{title:"L'isola dei misteri", blurb:"Un sindaco scomparso, un poliziotto morto e tanto umorismo — un caso sull'isola con chat della polizia e traccia GPS, dove il tuo fiuto vale oro."},
+      }},
+  fr:{pending:false, tape:"— SCÈNE DE CRIME — ENQUÊTEURS UNIQUEMENT —", kicker:"Le commissaire Fabre prend les choses en main",
+      title:["Quel type d'",'enquêteur',' es-tu ?'], meta:"9 questions · environ 3 minutes", start:"Lancer l'enquête",
+      lead:"Vous voulez donc rejoindre mon équipe d'enquête. Courageux. Neuf questions, et je saurai quel type d'enquêteur vous êtes — et laquelle de mes affaires vous convient. Je l'aurais résolue sans vous, évidemment. Mais voyons si vous pouvez suivre.",
+      sig:"— Commissaire M. Fabre", hahnke:"Mon verdict : utilisable. Pour votre niveau, étonnamment utilisable. Et j'ai justement l'affaire qu'il vous faut.",
+      qcount:"Question %1 / %2", qno:"Dossier n° %1", back:"Retour", next:"Suivant", finish:"Résoudre l'affaire",
+      stamp:"Affaire classée", resLabel:"Ton type d'enquêteur", portraitNote:"caricature à venir",
+      collLabel:"Tes esprits frères", caseLabel:"Ton affaire idéale", caseRibbon:"Recommandé",
+      restart:"Enquêter à nouveau", share:"Partager le test", copied:"Lien copié !",
+      saveImg:"Enregistrer l'image", shareImg:"Partager", copyCaption:"Copier la légende", captionCopied:"Légende copiée !",
+      shareHint:"Télécharge ton résultat et publie-le dans ta story — identifie @hiddengames_international avec #HiddenGamesErmittler !",
+      cardKicker:"Mon type d'enquêteur", cardCta:"Fais le test :",
+      caption:"Je suis %name ! 🕵️ Quel type d'enquêteur es-tu ? Fais le test et trouve ton affaire. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acheter sur Amazon", host:"Commissaire Fabre",
+      q:[
+       {q:"Une nouvelle affaire atterrit sur ton bureau. Que fais-tu en premier ?",
+        a:["Je lis le dossier de bout en bout et je note chaque détail.",
+           "Je me demande : à qui profite le crime ? J'entre dans les têtes.",
+           "J'écoute d'abord ce que racontent les gens autour de l'affaire.",
+           "Veste sur le dos, direction la scène. L'instinct vaut mieux que la paperasse."]},
+       {q:"Tu es sur la scène de crime. Qu'est-ce qui attire ton regard en premier ?",
+        a:["La minuscule incohérence que personne d'autre ne remarque.",
+           "Les indices — fibres, empreintes : on prélève tout.",
+           "Les visages des badauds. Les gens se trahissent.",
+           "Quelque chose dans l'air. Ici, quelque chose cloche vraiment."]},
+       {q:"À quoi ressemble ton bureau ?",
+        a:["Rangé au millimètre, chaque indice étiqueté.",
+           "Un chaos créatif — mais je retrouve tout les yeux fermés.",
+           "Un tableau couvert de photos et de fils rouges.",
+           "Quel bureau ? De toute façon je préfère le terrain."]},
+       {q:"Comment interroges-tu un suspect ?",
+        a:["Avec charme. Un sourire ouvre plus de portes que la pression.",
+           "Avec patience. J'attends qu'il se contredise tout seul.",
+           "Avec des faits. Je pose les preuves sur la table.",
+           "Avec peu de mots. J'observe simplement sa réaction."]},
+       {q:"Quel est ton plus grand talent ?",
+        a:["Des déductions logiques que d'autres prennent pour de la magie.",
+           "Je lis les gens comme un livre ouvert.",
+           "Je n'abandonne jamais — quel qu'en soit le prix.",
+           "Je flaire un mensonge avant même qu'il soit prononcé."]},
+       {q:"Un collègue fait une bourde. Comment réagis-tu ?",
+        a:["Je lui explique calmement et précisément ce qui a foiré.",
+           "Je reprends l'affaire moi-même, voilà tout.",
+           "Je le couvre — une équipe reste une équipe.",
+           "Je l'avais vu venir depuis longtemps et je ne dis rien."]},
+       {q:"Qu'est-ce qui te motive vraiment ?",
+        a:["La vérité. Tout simplement.",
+           "La justice pour ceux que personne ne voit.",
+           "Le frisson. La traque.",
+           "La loyauté. Je suis là pour les miens."]},
+       {q:"Quel rôle joues-tu dans l'équipe ?",
+        a:["Le cerveau qui résout l'affaire au bout du compte.",
+           "La personne discrète que tout le monde sous-estime.",
+           "Le charmeur qui passe toutes les portes.",
+           "L'âme obsédée encore au bureau en pleine nuit."]},
+       {q:"Et à la fin, comment résous-tu l'affaire ?",
+        a:["Par une brillante chaîne de déductions, étape par étape.",
+           "Par un détail du labo qui renverse tout.",
+           "Par une intuition qui tombe parfaitement juste.",
+           "En ne lâchant tout simplement jamais l'affaire."]},
+      ],
+      types:{
+        1:{name:"La machine à déduction", tag:"La logique est ton super-pouvoir.",
+           desc:"Tu vois ce que les autres ratent et assembles les fragments en une image limpide. Là où les autres devinent, toi tu déduis. Froid, précis, incorruptible.",
+           coll:"Sherlock Holmes et Auguste Dupin"},
+        2:{name:"Les petites cellules grises", tag:"De l'ordre, de la méthode — et un bel ego.",
+           desc:"Tu ne résous pas les affaires en courant partout, mais en réfléchissant. Tu comprends les mobiles, perces les gens à jour et savoures le grand final de la révélation.",
+           coll:"un certain gentleman belge à moustache 🤫"},
+        3:{name:"Lieutenant Claire Neyrac", tag:"Le calme est ton arme la plus tranchante.",
+           desc:"Tu n'as pas besoin d'élever la voix pour convaincre. Tu écoutes avant de juger, gardes plusieurs pistes ouvertes et fais parler les gens là où d'autres ne feraient que les intimider. Juste, posée, incorruptible — et au final, étonnamment souvent, celle qui a la bonne réponse.",
+           coll:"le Père Brown et les fins connaisseurs de l'âme humaine, qui écoutent d'abord et jugent ensuite"},
+        4:{name:"Lieutenant Catherine Livois", tag:"Cash, sans gants de velours.",
+           desc:"Tu ne mâches pas tes mots et abordes les affaires de front. Là où d'autres hésitent, tu parles franc et te fies à ton instinct pour le vrai coupable. Tu laisses rarement place au doute — et pourquoi donc, tu as presque toujours raison. Presque.",
+           coll:"les pros de l'interrogatoire sans concession, devant qui tout suspect se met à transpirer"},
+        5:{name:"Le gentleman charmeur", tag:"Un sourire ouvre toutes les portes.",
+           desc:"Tu enquêtes avec style. Le charme, la répartie et une pointe de zone grise te mènent plus loin que n'importe quel pied-de-biche. Personne ne te voit venir — on ne voit que le sourire.",
+           coll:"Arsène Lupin"},
+        6:{name:"Le limier de la police scientifique", tag:"Les preuves ne mentent jamais.",
+           desc:"Une fibre, une empreinte, un détail minuscule — pour toi, c'est toute l'histoire. Tu es patient, méticuleux et ne te fies qu'à ce que tu peux prouver.",
+           coll:"les pros de la police scientifique"},
+        7:{name:"L'obsédée de la vérité", tag:"Lâcher prise ? Tu ne connais pas.",
+           desc:"Une affaire devient une mission. La nuit, tu es encore plongée dans les dossiers, tu suis chaque fil rouge et ne t'arrêtes que lorsque la vérité est sur la table.",
+           coll:"les enquêtrices acharnées du Grand Nord"},
+      },
+      rex:{name:"Le collègue à quatre pattes", tag:"Tu résous les affaires au flair — et à l'instinct.",
+           desc:"Parler ? Surfait. Tu comptes sur l'instinct, la loyauté et un flair face auquel toute loupe fait pâle figure. La star secrète de chaque enquête.",
+           coll:"un légendaire berger allemand au service de la police 🐾"},
+      cases:{
+        1:{title:"Traversée mortelle", blurb:"Un cadavre et un tableau brûlé à bord d'un yacht privé en route pour Londres — un huis clos qu'on ne perce qu'à force de raisonnement glacial. Exactement ton affaire."},
+        2:{title:"Un Plan sans accroc", blurb:"Un détenu mort, un personnel louche et des plans cachés derrière les barreaux — celui qui y voit clair raisonne comme toi : un coup d'avance."},
+        3:{title:"Crime sur la Neige", blurb:"L'affaire du lieutenant Neyrac : au marché de Noël, un acteur meurt en pleine crèche vivante — devant tout le monde. Exactement l'affaire pour ton regard posé sur les gens."},
+        4:{title:"La Mort en Vert", blurb:"L'affaire du lieutenant Livois : un corps rejeté par la mer, un suspect arrêté en un éclair. Mais est-ce vraiment le bon qui est sous les verrous ? Une affaire pour qui parle franc — et regarde quand même à deux fois."},
+        5:{title:"Le Diadème d'Amaryllis", blurb:"Un cambriolage de musée effronté, un message énigmatique, une poursuite en direct — une affaire élégante et pleine de style, tout à fait à ton goût."},
+        6:{title:"Sur la piste des braises", blurb:"À l'aciérie, des gens disparaissent, un objet volé refait surface, une piste brûlante traverse les flammes. Énigmes retorses et une expérience à la clé — ici, seul compte ce que tu peux prouver."},
+        7:{title:"Les ombres du temps", blurb:"Un navire coulé il y a 80 ans, une montre de poche coupée en deux, un garçon à la recherche de sa famille — une affaire émouvante qui ne te lâche plus."},
+        rex:{title:"Mystère insulaire", blurb:"Un maire disparu, un policier mort et une bonne dose d'humour — une affaire insulaire avec chat de police et trace GPS, où ton flair vaut de l'or."},
+      }},
+  es:{pending:false, tape:"— ESCENA DEL CRIMEN — SOLO INVESTIGADORES —", kicker:"El comisario Gallo toma el mando",
+      title:['¿Qué tipo de ','investigador',' eres?'], meta:"9 preguntas · unos 3 minutos", start:"Iniciar la investigación",
+      lead:"Así que quieren unirse a mi equipo de investigación. Valientes. Nueve preguntas y sabré qué tipo de investigador son — y cuál de mis casos les conviene. Lo habría resuelto sin ustedes, por supuesto. Pero veamos si están a la altura.",
+      sig:"— Comisario Á. Gallo", hahnke:"Mi veredicto: aprovechables. Para su nivel, sorprendentemente aprovechables. Y resulta que tengo el caso perfecto para ustedes.",
+      qcount:"Pregunta %1 / %2", qno:"Expediente n.º %1", back:"Atrás", next:"Siguiente", finish:"Resolver el caso",
+      stamp:"Caso cerrado", resLabel:"Tu tipo de investigador", portraitNote:"caricatura en camino",
+      collLabel:"Tus espíritus afines", caseLabel:"Tu caso perfecto", caseRibbon:"Recomendado",
+      restart:"Investigar de nuevo", share:"Compartir el test", copied:"¡Enlace copiado!",
+      saveImg:"Guardar como imagen", shareImg:"Compartir", copyCaption:"Copiar descripción", captionCopied:"¡Descripción copiada!",
+      shareHint:"Descarga tu resultado y publícalo en tu historia — etiqueta a @hiddengames_international con #HiddenGamesErmittler!",
+      cardKicker:"Mi tipo de investigador", cardCta:"Haz el test:",
+      caption:"¡Soy %name! 🕵️ ¿Qué tipo de investigador eres? Haz el test y encuentra tu caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Comprar en Amazon", host:"Comisario Gallo",
+      q:[
+       {q:"Un nuevo caso llega a tu escritorio. ¿Qué haces primero?",
+        a:["Leo el expediente de principio a fin y marco cada detalle.",
+           "Me pregunto: ¿a quién beneficia? Me meto en la mente del culpable.",
+           "Primero escucho lo que cuenta la gente de alrededor.",
+           "Me pongo la chaqueta y voy a la escena. El instinto gana al papeleo."]},
+       {q:"Estás en la escena del crimen. ¿En qué te fijas primero?",
+        a:["En la mínima incoherencia que nadie más percibe.",
+           "En los rastros — fibras, huellas: se recoge todo.",
+           "En las caras de los presentes. La gente se delata.",
+           "En algo en el aire. Aquí hay algo que no encaja para nada."]},
+       {q:"¿Cómo es tu escritorio?",
+        a:["Ordenado al milímetro, cada prueba etiquetada.",
+           "Un caos creativo, pero lo encuentro todo a ciegas.",
+           "Un panel lleno de fotos e hilos rojos.",
+           "¿Qué escritorio? Prefiero estar en la calle, de todos modos."]},
+       {q:"¿Cómo interrogas a un sospechoso?",
+        a:["Con encanto. Una sonrisa abre más puertas que la presión.",
+           "Con paciencia. Espero a que se contradiga solo.",
+           "Con hechos. Pongo las pruebas sobre la mesa.",
+           "Con pocas palabras. Solo observo cómo reacciona."]},
+       {q:"¿Cuál es tu mayor talento?",
+        a:["Deducciones lógicas que otros toman por magia.",
+           "Leo a las personas como un libro abierto.",
+           "Nunca me rindo, cueste lo que cueste.",
+           "Huelo una mentira antes de que se pronuncie."]},
+       {q:"Un compañero mete la pata. ¿Cómo reaccionas?",
+        a:["Le explico con calma y precisión qué salió mal.",
+           "Me hago cargo del caso yo mismo y punto.",
+           "Lo cubro: el equipo es el equipo.",
+           "Lo vi venir hace tiempo y no digo nada."]},
+       {q:"¿Qué te impulsa de verdad?",
+        a:["La verdad. Así de simple.",
+           "La justicia para quienes nadie más ve.",
+           "La adrenalina. La caza.",
+           "La lealtad. Estoy ahí para los míos."]},
+       {q:"¿Qué papel juegas en el equipo?",
+        a:["La mente que al final resuelve el caso.",
+           "La persona discreta a la que todos subestiman.",
+           "El encanto que abre cualquier puerta.",
+           "El alma obsesionada que sigue en la oficina de noche."]},
+       {q:"Y al final, ¿cómo resuelves el caso?",
+        a:["Con una brillante cadena de deducciones, paso a paso.",
+           "Con un detalle del laboratorio que lo cambia todo.",
+           "Con una corazonada que resulta clavada.",
+           "Simplemente, sin soltar nunca la presa."]},
+      ],
+      types:{
+        1:{name:"La máquina de deducción", tag:"La lógica es tu superpoder.",
+           desc:"Ves lo que los demás pasan por alto y unes los fragmentos en una imagen nítida. Donde otros adivinan, tú deduces. Frío, preciso, incorruptible.",
+           coll:"Sherlock Holmes y Auguste Dupin"},
+        2:{name:"Las pequeñas células grises", tag:"Orden, método... y un sano ego.",
+           desc:"No resuelves los casos corriendo de un lado a otro, sino pensando. Entiendes los móviles, calas a la gente y disfrutas del gran momento de la revelación.",
+           coll:"cierto caballero belga con bigote 🤫"},
+        3:{name:"Comisaria Carla Navarro Puente", tag:"La calma es tu arma más afilada.",
+           desc:"No necesitas alzar la voz para convencer. Escuchas antes de juzgar, mantienes abiertas varias hipótesis y haces hablar a la gente donde otros solo la intimidarían. Justa, serena, incorruptible... y al final, sorprendentemente a menudo, la que tiene la respuesta correcta.",
+           coll:"el Padre Brown y los serenos conocedores del alma humana, que primero escuchan y luego juzgan"},
+        4:{name:"Comisaria Carolina Llamazares Ruiz", tag:"Sin rodeos ni guantes de seda.",
+           desc:"No te muerdes la lengua y afrontas los casos de frente. Donde otros dudan, tú hablas claro y confías en tu olfato para dar con el verdadero culpable. Rara vez dejas sitio a la duda... ¿y para qué?, casi siempre aciertas. Casi.",
+           coll:"los implacables profesionales del interrogatorio ante quienes todo sospechoso suda frío"},
+        5:{name:"El caballero encantador", tag:"Una sonrisa abre todas las puertas.",
+           desc:"Investigas con estilo. El encanto, la agudeza y un punto de zona gris te llevan más lejos que cualquier palanca. Nadie te ve venir: solo ven la sonrisa.",
+           coll:"Arsène Lupin"},
+        6:{name:"El sabueso forense", tag:"Las pruebas nunca mienten.",
+           desc:"Una fibra, una huella, un detalle minúsculo: para ti, esa es toda la historia. Eres paciente, meticuloso y solo te fías de lo que puedes demostrar.",
+           coll:"los profesionales de la policía científica"},
+        7:{name:"La incansable", tag:"¿Soltar? No va contigo.",
+           desc:"Un caso se convierte en tu misión. De noche sigues sobre los expedientes, persigues cada hilo rojo y solo paras cuando la verdad está sobre la mesa.",
+           coll:"las tenaces investigadoras del lejano Norte"},
+      },
+      rex:{name:"El colega de cuatro patas", tag:"Resuelves los casos con el instinto... y el olfato.",
+           desc:"¿Hablar? Sobrevalorado. Te fías del instinto, la lealtad y un olfato ante el que cualquier lupa queda en ridículo. La estrella secreta de cada investigación.",
+           coll:"un legendario pastor alemán al servicio de la policía 🐾"},
+      cases:{
+        1:{title:"Una Travesía Fatal", blurb:"Un cadáver y un cuadro quemado a bordo de un yate privado rumbo a Londres — un escenario cerrado que solo se resuelve razonando a sangre fría. Justo tu caso."},
+        2:{title:"Un plan perfecto", blurb:"Un recluso muerto, personal turbio y planes ocultos entre rejas — quien ve claro aquí razona como tú: una jugada por delante."},
+        3:{title:"Crimen bajo la nieve", blurb:"El caso de la comisaria Navarro: en el mercado navideño, un actor muere en plena representación del belén — delante de todos. Justo el caso para tu mirada serena sobre las personas."},
+        4:{title:"Una Solución Venenosa", blurb:"El caso de la comisaria Llamazares: un cuerpo arrastrado por el mar, un sospechoso detenido en un abrir y cerrar de ojos. Pero ¿está de verdad el culpable entre rejas? Un caso para quien habla claro... y aun así mira dos veces."},
+        5:{title:"La Diadema Escarlata", blurb:"Un robo descarado en un museo, un mensaje enigmático, una persecución en directo — un caso elegante y con estilo, justo a tu gusto."},
+        6:{title:"Rastro de brasas", blurb:"En la acería desaparecen personas, reaparece un objeto robado, una pista ardiente atraviesa el fuego. Enigmas intrincados y un experimento incluido — aquí solo cuenta lo que puedas demostrar."},
+        7:{title:"Sombras del tiempo", blurb:"Un barco hundido hace 80 años, un reloj de bolsillo partido en dos, un niño en busca de su familia — un caso emotivo que ya no te suelta."},
+        rex:{title:"Caos en la Isla", blurb:"Un alcalde desaparecido, un policía muerto y mucho humor — un caso isleño con chat policial y rastro GPS, donde tu olfato vale oro."},
+      }},
+};
+
+const LANGS=["de","en","it","fr","es"];
+const PENDING_NOTE={
+  de:"🌐 Übersetzung folgt — Fragen und Ergebnisse aktuell auf Englisch.",
+  en:"🌐 Translation pending — questions and results currently in English.",
+  it:"🌐 Traduzione in arrivo — domande e risultati attualmente in inglese.",
+  fr:"🌐 Traduction à venir — questions et résultats actuellement en anglais.",
+  es:"🌐 Traducción en camino — preguntas y resultados actualmente en inglés.",
+};
+
+/* ---- 3) STATE + HELPER -------------------------------------------------- */
+let lang="de";
+let qi=0;
+const answers=new Array(Q.length).fill(null); // gewählter ORIGINAL-Optionsindex je Frage
+let order=[];                                 // Anzeige-Reihenfolge je Frage (gemischt)
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function buildOrder(){ order = Q.map(()=>shuffle([0,1,2,3])); } // pro Durchlauf neu mischen
+
+const $=id=>document.getElementById(id);
+function L(){ return i18n[lang]; }
+/* Inhalte (q/types/rex/cases) bei pending-Sprachen aus EN ziehen: */
+function C(){ return L().pending ? i18n.en : L(); }
+function fmt(s,...v){ return s.replace(/%(\d)/g,(_,n)=>v[n-1]); }
+
+/* ---- BILDER ------------------------------------------------------------- */
+/* Mapping Ergebnistyp → Datei in img/ (Rex = EasterEgg). Hahnke (Rückenansicht)
+   sitzt sprachneutral im Intro. Quadratische JPEGs, in img/ optimiert abgelegt. */
+const HAHNKE_SRC="img/hahnke.jpg";
+function portraitSrc(key){ return key==="rex" ? "img/rex.jpg" : "img/typ"+key+".jpg"; }
+function loadImg(src){ return new Promise(res=>{ if(!src){res(null);return;} const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=src; }); }
+/* Setzt das Porträt in einen .portrait-Slot (ersetzt das "?"-Platzhalterzeichen). */
+function setPortrait(el, src){
+  if(!el) return;
+  let img=el.querySelector("img");
+  if(!img){ img=document.createElement("img"); img.alt=""; el.insertBefore(img, el.firstChild); }
+  if(img.getAttribute("src")!==src) img.src=src;
+  el.classList.add("has-img");
+}
+
+/* ---- SHAREPIC (Instagram) ---------------------------------------------- */
+/* Marke zentral editierbar: Handle / Hashtag / Test-URL fürs Sharepic. */
+const BRAND={
+  hashtag:"#HiddenGamesErmittler",
+  url:"ermittlertyp.hidden.games",
+  ig:{ de:"@hiddengames_original", int:"@hiddengames_international" },
+  // weitere Kanäle: Facebook DE hidden.games.original · TikTok DE hiddengames_original · TikTok INT hiddengamescrimescene
+};
+function igHandle(lang){ return lang==="de" ? BRAND.ig.de : BRAND.ig.int; }
+
+/* Offizielles weißes Logo als data:image/png;base64,... hier einsetzen (Originalproportionen, nur Weiß).
+   Solange leer, zeigt das Sharepic einen Logo-Platzhalter. */
+const LOGO_DATA="";
+let _logoImg=null;
+function loadLogo(){return new Promise(res=>{if(!LOGO_DATA){res(null);return;}const im=new Image();im.onload=()=>{_logoImg=im;res(im);};im.onerror=()=>res(null);im.src=LOGO_DATA;});}
+
+/* ---- KAUF-LINKS pro Fall (= pro Ergebnis-Typ) ---------------------------
+   Echte Amazon-Produkt-Deeplinks je Markt (Quelle: Amazon_URLS.xlsx).
+   Leeres Feld "" = Button wird in dem Markt NICHT angezeigt (Fall dort nicht
+   verfügbar). Dank REC (Markt-Remap) wird in DE/IT/FR/ES jede Ergebnis-Kachel
+   auf einen verfügbaren Fall geleitet, sodass nie ein leerer Button entsteht.
+   en = amazon.com (nur falls EN-Kauf später aktiviert wird; aktuell ist EN
+   reiner Persönlichkeitstest ohne Kauf). shopDe = eigener Online-Shop, nur DE.
+   TODO Francis: shopDe-Deeplinks je Fall ergänzen (zeigt aktuell auf Startseite). */
+const BUY = {
+  1:  { amazon:{de:"https://www.amazon.de/dp/B0CHFFSQXD", en:"", it:"https://www.amazon.it/dp/B0F8BTZCKY", fr:"https://www.amazon.fr/dp/B0FN4NGBMD", es:"https://www.amazon.es/dp/B0FN4KM9D5"}, shopDe:"https://hidden.games" }, // F8 Tödliche Überfahrt
+  2:  { amazon:{de:"https://www.amazon.de/dp/B0BGJ61D76", en:"", it:"https://www.amazon.it/dp/B0D14TQTVL", fr:"https://www.amazon.fr/dp/B0DK3V83Q9", es:"https://www.amazon.es/dp/B0DK3TZWB2"}, shopDe:"https://hidden.games" }, // F9 Ein perfekter Plan
+  3:  { amazon:{de:"https://www.amazon.de/dp/B09GR85FG9", en:"", it:"https://www.amazon.it/dp/B0DGV5Y7LT", fr:"https://www.amazon.fr/dp/B0FN4P733D", es:""}, shopDe:"https://hidden.games" }, // F6 Eiskaltes Verbrechen (Nagel) · ES n/v → ES remappt Typ3→Fall2
+  4:  { amazon:{de:"https://www.amazon.de/dp/B08HJ1VK25", en:"https://www.amazon.com/dp/B0DNZF7QYQ", it:"https://www.amazon.it/dp/B0B7RN4XQH", fr:"https://www.amazon.fr/dp/B0B7RN3GFL", es:"https://www.amazon.es/dp/B0B7RN66FB"}, shopDe:"https://hidden.games" }, // F3 Grünes Gift (Lievers)
+  5:  { amazon:{de:"https://www.amazon.de/dp/B08C42MPV4", en:"https://www.amazon.com/dp/B09FYLJYQM", it:"https://www.amazon.it/dp/B09KXXF2RY", fr:"https://www.amazon.fr/dp/B09KY1R61C", es:"https://www.amazon.es/dp/B09KXZDBFS"}, shopDe:"https://hidden.games" }, // F2 Das Diadem der Madonna
+  6:  { amazon:{de:"https://www.amazon.de/dp/B0FNN7N576", en:"", it:"", fr:"", es:""}, shopDe:"https://hidden.games" }, // F16 Glutspur · nur DE verfügbar → IT/FR/ES remappen Typ6→Fall4
+  7:  { amazon:{de:"https://www.amazon.de/dp/B0FNN85CDH", en:"", it:"", fr:"", es:""}, shopDe:"https://hidden.games" }, // F14 Schatten der Zeit · nur DE verfügbar → IT/FR/ES remappen Typ7→Fall1
+  rex:{ amazon:{de:"https://www.amazon.de/dp/B0BGJ8DD6V", en:"", it:"https://www.amazon.it/dp/B0DGV8M3KH", fr:"https://www.amazon.fr/dp/B0DK3Q7MQB", es:"https://www.amazon.es/dp/B0DNZPCQPH"}, shopDe:"https://hidden.games" }, // F11 Reif für die Insel
+};
+
+/* Märkte mit Fallempfehlung + Kauf-Buttons. Englisch bleibt bewusst draußen
+   (uneinheitliche Marktplätze UK/US/CA/AU) und ist reiner Persönlichkeitstest.
+   Klein-Märkte (NL/PT/PL …) würden, falls hinzugefügt, ebenfalls ohne Kauf laufen. */
+const BUY_MARKETS = ["de","it","fr","es"];
+
+/* Markt-spezifische Fall-Empfehlung: wo der Standard-Fall (noch) nicht erschienen ist,
+   auf einen bereits verfügbaren Fall umbiegen — so bleibt keine Kachel ohne Kaufempfehlung.
+   Schlüssel = Ergebnis-Typ, Wert = stattdessen empfohlener Fall (Typ-Schlüssel). */
+const REC = {
+  it: { 6:4, 7:1 },       // Glutspur→Veleno verde · Schatten der Zeit→Traversata Fatale
+  fr: { 6:4, 7:1 },       // Glutspur→La mort en vert · Schatten der Zeit→Traversée mortelle
+  es: { 3:2, 6:4, 7:1 },  // Eiskaltes Verbr.(bald)→Un plan perfecto · Glutspur→Una solución venenosa · Schatten der Zeit→Una travesía fatal
+};
+let _result=null, _cardBlob=null;
+
+function caption(){ return (L().caption||"").replace("%name", _result?_result.t.name:""); }
+function _spc(x,v){ try{ x.letterSpacing=v; }catch(e){} }
+function _wrap(x,text,maxW){
+  const words=text.split(" ");const lines=[];let cur="";
+  for(const w of words){const tt=cur?cur+" "+w:w; if(x.measureText(tt).width>maxW&&cur){lines.push(cur);cur=w;}else cur=tt;}
+  if(cur)lines.push(cur);return lines;
+}
+function _fit(x,text,maxW,maxLines,startFs,minFs){
+  for(let fs=startFs;fs>=minFs;fs-=4){x.font="700 "+fs+"px Oswald";const l=_wrap(x,text,maxW);if(l.length<=maxLines)return{fs,lines:l};}
+  x.font="700 "+minFs+"px Oswald";return{fs:minFs,lines:_wrap(x,text,maxW)};
+}
+async function ensureFonts(){
+  try{ await Promise.all([
+    document.fonts.load("700 80px Oswald"), document.fonts.load("600 28px Oswald"),
+    document.fonts.load("400 28px 'Open Sans'"), document.fonts.load("700 50px Caveat") ]);
+    await document.fonts.ready; }catch(e){}
+}
+/* Zeichnet das quadratische 1080×1080 Instagram-Sharepic.
+   PLATZHALTER: Die "?"-Box wird später durch die echte Karikatur ersetzt
+   (Bild laden und mit x.drawImage(img, px,py,ps,ps) einsetzen). */
+async function buildCard(t, portraitSrcUrl){
+  await ensureFonts();
+  const portraitImg = await loadImg(portraitSrcUrl||null);
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;
+  const x=c.getContext("2d");
+  const YEL="#f5dc24",GRN="#b4dc41",PAPER="#f0eadd",INK="#13110d",RED="#b3322f";
+
+  // Hintergrund: dunkle Pinnwand + Vignette + feines Korn
+  x.fillStyle="#0c0b09";x.fillRect(0,0,W,H);
+  let g=x.createRadialGradient(W/2,H*0.40,120,W/2,H*0.40,H*0.85);
+  g.addColorStop(0,"rgba(56,50,40,.40)");g.addColorStop(1,"rgba(0,0,0,0)");
+  x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.save();x.globalAlpha=.05;
+  for(let i=0;i<1500;i++){x.fillStyle=Math.random()<.5?"#fff":"#000";x.fillRect(Math.random()*W,Math.random()*H,2,2);}
+  x.restore();
+  x.strokeStyle="rgba(245,240,210,.10)";x.lineWidth=2;x.strokeRect(26,26,W-52,H-52);
+
+  const pin=(cx,cy)=>{x.save();
+    x.fillStyle="rgba(0,0,0,.45)";x.beginPath();x.arc(cx+2,cy+5,15,0,7);x.fill();
+    let pg=x.createRadialGradient(cx-5,cy-6,2,cx,cy,16);pg.addColorStop(0,"#e8615b");pg.addColorStop(1,"#9d2722");
+    x.fillStyle=pg;x.beginPath();x.arc(cx,cy,15,0,7);x.fill();
+    x.fillStyle="rgba(255,255,255,.6)";x.beginPath();x.arc(cx-5,cy-6,4,0,7);x.fill();x.restore();};
+
+  // Polizei-Absperrband oben
+  (function(){x.save();x.translate(W/2,134);x.rotate(-2.2*Math.PI/180);
+    x.fillStyle=YEL;x.fillRect(-(W/2)-60,-44,W+120,88);
+    x.strokeStyle="rgba(0,0,0,.6)";x.lineWidth=3;
+    x.beginPath();x.moveTo(-(W/2)-60,-44);x.lineTo(W/2+60,-44);x.moveTo(-(W/2)-60,44);x.lineTo(W/2+60,44);x.stroke();
+    x.fillStyle="#000";x.textAlign="center";x.textBaseline="middle";x.font="700 30px Oswald";_spc(x,"9px");
+    x.fillText((L().tape||"").toUpperCase(),0,2);_spc(x,"0px");x.restore();})();
+
+  // Beweisfoto (angepinnt, gekippt)
+  const ps=460,fb=18,photoTop=212,cyP=photoTop+(ps/2+fb),ang=-3;
+  x.save();x.translate(W/2,cyP);x.rotate(ang*Math.PI/180);
+  x.fillStyle="rgba(0,0,0,.5)";x.fillRect(-ps/2-fb+8,-ps/2-fb+12,ps+2*fb,ps+2*fb);
+  x.fillStyle="#efeae0";x.fillRect(-ps/2-fb,-ps/2-fb,ps+2*fb,ps+2*fb);
+  x.save();x.beginPath();x.rect(-ps/2,-ps/2,ps,ps);x.clip();
+  if(portraitImg){
+    x.drawImage(portraitImg,-ps/2,-ps/2,ps,ps);   // quadratisches Porträt rotiert ins gekippte Bildfeld
+  } else {
+    x.fillStyle="#15140f";x.fillRect(-ps/2,-ps/2,ps,ps);
+    x.strokeStyle="#100f0c";x.lineWidth=12;
+    for(let i=-ps;i<ps*2;i+=26){x.beginPath();x.moveTo(-ps/2+i,-ps/2);x.lineTo(-ps/2+i-ps,ps/2);x.stroke();}
+    x.fillStyle="#6c675c";x.font="700 150px Oswald";x.textAlign="center";x.textBaseline="middle";x.fillText("?",0,6);
+  }
+  x.restore();
+  x.fillStyle="rgba(236,230,216,.5)";
+  x.save();x.translate(-ps/2-fb+4,-ps/2-fb+4);x.rotate(-45*Math.PI/180);x.fillRect(-58,-17,116,34);x.restore();
+  x.save();x.translate(ps/2+fb-4,ps/2+fb-4);x.rotate(-45*Math.PI/180);x.fillRect(-58,-17,116,34);x.restore();
+  x.restore();
+  pin(W/2,photoTop+10);
+
+  // Stempel "Akte geschlossen"
+  (function(){x.save();x.translate(W-236,322);x.rotate(-13*Math.PI/180);x.globalAlpha=.92;
+    const sw=300,sh=92;x.strokeStyle=RED;x.lineWidth=5;
+    x.strokeRect(-sw/2,-sh/2,sw,sh);x.strokeRect(-sw/2+8,-sh/2+8,sw-16,sh-16);
+    x.fillStyle=RED;x.textAlign="center";x.textBaseline="middle";x.font="800 30px Oswald";_spc(x,"3px");
+    x.fillText((L().stamp||"").toUpperCase(),0,2);_spc(x,"0px");x.restore();})();
+
+  // Kicker
+  let ny=cyP+(ps/2+fb)+66;
+  x.textAlign="center";x.textBaseline="alphabetic";
+  x.fillStyle=GRN;x.font="700 26px Oswald";_spc(x,"7px");
+  x.fillText((L().cardKicker||"").toUpperCase(),W/2,ny);_spc(x,"0px");
+
+  // Name auf Klebeband
+  const nm=t.name.toUpperCase();const fit=_fit(x,nm,W-320,2,72,38);
+  const tapeH=fit.lines.length>1?176:108,tapeY=ny+34+tapeH/2,tapeW=W-150,tang=1.5;
+  x.save();x.translate(W/2,tapeY);x.rotate(tang*Math.PI/180);
+  x.fillStyle="rgba(0,0,0,.4)";x.fillRect(-tapeW/2+6,-tapeH/2+9,tapeW,tapeH);
+  const nt=12;x.fillStyle=PAPER;x.beginPath();
+  x.moveTo(-tapeW/2,-tapeH/2);x.lineTo(tapeW/2,-tapeH/2);x.lineTo(tapeW/2-nt,0);x.lineTo(tapeW/2,tapeH/2);
+  x.lineTo(-tapeW/2,tapeH/2);x.lineTo(-tapeW/2+nt,0);x.closePath();x.fill();
+  x.globalAlpha=.05;x.strokeStyle="#000";x.lineWidth=1;
+  for(let i=-tapeH/2+6;i<tapeH/2;i+=7){x.beginPath();x.moveTo(-tapeW/2,i);x.lineTo(tapeW/2,i);x.stroke();}
+  x.globalAlpha=1;
+  x.fillStyle=INK;x.textAlign="center";x.textBaseline="middle";x.font="700 "+fit.fs+"px Oswald";_spc(x,"1px");
+  const lh=fit.fs*1.04,y0=-(fit.lines.length-1)*lh/2;
+  fit.lines.forEach((ln,i)=>x.fillText(ln,0,y0+i*lh));_spc(x,"0px");x.restore();
+
+  // Tagline (Caveat)
+  x.fillStyle=GRN;x.font="700 50px Caveat";x.textAlign="center";x.textBaseline="alphabetic";
+  x.fillText(t.tag,W/2,tapeY+tapeH/2+62);
+
+  // Footer
+  const by=H-186;x.textAlign="center";
+  x.fillStyle=YEL;x.font="700 40px Oswald";_spc(x,"1px");x.fillText(BRAND.hashtag,W/2,by);_spc(x,"0px");
+  x.fillStyle="#9a958a";x.font="400 26px 'Open Sans'";
+  x.fillText((L().cardCta||"")+" "+BRAND.url+"  \u00b7  "+igHandle(lang),W/2,by+44);
+  // Logo (weiß, Originalproportionen) — sonst Platzhalter
+  if(LOGO_DATA && !_logoImg){ await loadLogo(); }
+  if(_logoImg){
+    const lw=300, lh=lw*(_logoImg.height/_logoImg.width||0.28);
+    x.drawImage(_logoImg, W/2-lw/2, H-72-lh/2, lw, lh);
+  } else {
+    // Fallback: weißer Wortmarken-Schriftzug (offizielles weißes Logo via LOGO_DATA einsetzbar)
+    x.fillStyle="#f2efe4";x.textAlign="center";x.textBaseline="middle";x.font="700 46px Oswald";_spc(x,"8px");
+    x.fillText("HIDDEN GAMES",W/2,H-82);_spc(x,"0px");x.textBaseline="alphabetic";
+  }
+  return c;
+}
+async function generateCard(){
+  if(!_result) return; _cardBlob=null;
+  const img=$("cardPreview"); img.classList.remove("ready");
+  try{
+    const c=await buildCard(_result.t, _result.portrait);
+    img.src=c.toDataURL("image/jpeg",0.92); img.classList.add("ready");
+    c.toBlob(b=>{ _cardBlob=b; },"image/jpeg",0.92);
+  }catch(e){}
+}
+async function getCardBlob(){
+  if(_cardBlob) return _cardBlob;
+  const c=await buildCard(_result.t, _result.portrait);
+  return await new Promise(r=>c.toBlob(r,"image/jpeg",0.92));
+}
+function downloadBlob(b,name){
+  const u=URL.createObjectURL(b);const a=document.createElement("a");
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+
+/* ---- 4) RENDER ---------------------------------------------------------- */
+function renderChrome(){
+  document.documentElement.lang=lang;
+  // Sprachbuttons
+  const nav=$("langs"); nav.innerHTML="";
+  LANGS.forEach(code=>{
+    const b=document.createElement("button");
+    b.textContent=code.toUpperCase();
+    b.className=code===lang?"active":"";
+    b.setAttribute("aria-pressed", code===lang);
+    b.onclick=()=>{ lang=code; syncURL(); renderAll(); };
+    nav.appendChild(b);
+  });
+  // pending-Hinweis
+  const p=$("pending");
+  if(L().pending){ p.textContent=PENDING_NOTE[lang]; p.classList.add("show"); }
+  else { p.classList.remove("show"); }
+}
+
+function renderIntro(){
+  $("introTape").textContent=L().tape;
+  $("introKicker").textContent=L().kicker;
+  const [a,y,b]=L().title;
+  $("introTitle").innerHTML = a+'<span class="y">'+y+'</span>'+b;
+  $("introLead").textContent=L().lead;
+  $("introSig").textContent=L().sig||"";
+  $("introMeta").textContent=L().meta;
+  $("startBtn").textContent=L().start;
+  setPortrait($("introPic"), HAHNKE_SRC);          // Hahnke von hinten (sprachneutral)
+  $("introPicNote").textContent=L().host||"";
+}
+
+function renderQuestion(){
+  const data=C().q[qi];
+  $("qcount").textContent=fmt(L().qcount, qi+1, Q.length);
+  $("barfill").style.width=((qi)/Q.length*100)+"%";
+  $("qno").textContent=fmt(L().qno, qi+1);
+  $("questionText").textContent=data.q;
+  const wrap=$("opts"); wrap.innerHTML="";
+  const seq = order[qi] || [0,1,2,3];
+  seq.forEach((origIdx,slot)=>{
+    const txt=data.a[origIdx];
+    const sel=answers[qi]===origIdx;
+    const b=document.createElement("button");
+    b.className="opt"+(sel?" sel":"");
+    b.innerHTML='<span class="tag">'+String.fromCharCode(65+slot)+'</span><span>'+txt+'</span>';
+    b.setAttribute("aria-pressed", sel);
+    b.onclick=()=>{ answers[qi]=origIdx; renderQuestion(); };
+    wrap.appendChild(b);
+  });
+  $("backBtn").textContent=L().back;
+  $("backBtn").style.visibility = qi===0 ? "hidden":"visible";
+  const isLast = qi===Q.length-1;
+  $("nextBtn").textContent = isLast ? L().finish : L().next;
+  $("nextBtn").disabled = answers[qi]===null;
+}
+
+function computeResult(){
+  const score={1:0,2:0,3:0,4:0,5:0,6:0,7:0,r:0};
+  answers.forEach((opt,i)=>{
+    if(opt==null) return;
+    const s=Q[i][opt];
+    for(const k in s){ score[k]+=s[k]; }
+  });
+  if(score.r>=REX_THRESHOLD) return "rex";
+  let best=TIE_ORDER[0];
+  TIE_ORDER.forEach(t=>{ if(score[t]>score[best]) best=t; });
+  return best;
+}
+
+function renderResult(){
+  const key=computeResult();
+  const isRex = key==="rex";
+  const t = isRex ? C().rex : C().types[key];
+  // Empfohlener Fall pro Markt: Lückentypen auf verfügbare Fälle umbiegen (REC)
+  const recKey = (REC[lang] && REC[lang][key]!=null) ? REC[lang][key] : key;
+  const cs = (recKey==="rex") ? C().cases.rex : C().cases[recKey];
+  $("barfill").style.width="100%";
+  $("stamp").textContent=L().stamp;
+  $("resLabel").textContent=L().resLabel;
+  $("resName").textContent=t.name;
+  $("resTag").textContent=t.tag;
+  setPortrait($("resultPortrait"), portraitSrc(key));   // Porträt/Karikatur statt "?"
+  $("portraitNote").textContent="";
+  $("resDesc").textContent=t.desc;
+  $("collLabel").textContent=L().collLabel;
+  $("resColl").textContent=t.coll;
+  $("resHahnke").textContent=L().hahnke||"";
+  $("caseLabel").textContent=L().caseLabel;
+  $("caseRibbon").textContent=L().caseRibbon;
+  $("caseTitle").textContent=cs.title;
+  $("caseBlurb").textContent=cs.blurb;
+  // Kauf-Buttons: Amazon (alle Märkte) + Shop (nur DE); leere URL = Button aus
+  const buy = BUY[recKey] || {};
+  const amzn = (buy.amazon||{})[lang] || "";
+  let bhtml = "";
+  if(amzn) bhtml += '<a class="btn buy" href="'+amzn+'" target="_blank" rel="noopener">🛒 '+(L().amazonBtn||"Amazon")+'</a>';
+  if(lang==="de" && buy.shopDe) bhtml += '<a class="btn buy ghost" href="'+buy.shopDe+'" target="_blank" rel="noopener">'+(L().shopBtn||"Shop")+'</a>';
+  $("buyActions").innerHTML = bhtml;
+  // Empfehlung + Kauf nur in Märkten mit gepflegtem Sortiment (siehe BUY_MARKETS)
+  const hideCase = !BUY_MARKETS.includes(lang);
+  $("caseCard").style.display = hideCase ? "none" : "";
+  $("buyActions").style.display = hideCase ? "none" : "";
+  $("restartBtn").textContent=L().restart;
+  $("saveBtn").textContent="📸 "+L().saveImg;
+  $("shareImgBtn").textContent=L().shareImg;
+  $("shareImgBtn").hidden = !(navigator.canShare);
+  $("captionBtn").textContent=L().copyCaption;
+  $("shareHint").textContent=L().shareHint;
+  $("copied").classList.remove("show");
+  _result={ t:t, isRex:isRex, key:key, portrait:portraitSrc(key) };
+  generateCard();
+}
+
+function show(screen){
+  ["intro","quiz","result"].forEach(s=>{
+    $("screen-"+s).classList.toggle("hidden", s!==screen);
+  });
+  window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+}
+
+function renderAll(){
+  renderChrome();
+  renderIntro();
+  // aktuellen Screen frisch zeichnen
+  if(!$("screen-quiz").classList.contains("hidden")) renderQuestion();
+  if(!$("screen-result").classList.contains("hidden")) renderResult();
+}
+
+/* ---- 5) FLOW ------------------------------------------------------------ */
+function start(){ qi=0; answers.fill(null); buildOrder(); renderQuestion(); show("quiz"); }
+function next(){
+  if(answers[qi]===null) return;
+  if(qi<Q.length-1){ qi++; renderQuestion(); show("quiz"); }
+  else { renderResult(); show("result"); }
+}
+function back(){ if(qi>0){ qi--; renderQuestion(); show("quiz"); } }
+
+/* ---- 6) URL / Sprache --------------------------------------------------- */
+function syncURL(){
+  const u=new URL(window.location);
+  u.searchParams.set("lang",lang);
+  history.replaceState(null,"",u);
+}
+function initLang(){
+  const p=new URLSearchParams(location.search).get("lang");
+  if(p && LANGS.includes(p)){ lang=p; return; }
+  const b=(navigator.language||"de").slice(0,2).toLowerCase();
+  lang = LANGS.includes(b) ? b : "en";
+}
+
+/* ---- 7) WIRE UP --------------------------------------------------------- */
+$("startBtn").onclick=start;
+$("nextBtn").onclick=next;
+$("backBtn").onclick=back;
+$("restartBtn").onclick=()=>{ qi=0; answers.fill(null); renderIntro(); show("intro"); };
+$("saveBtn").onclick=async()=>{ const b=await getCardBlob(); if(b) downloadBlob(b,"hidden-games-ermittlertyp.jpg"); };
+$("shareImgBtn").onclick=async()=>{
+  const b=await getCardBlob(); if(!b) return;
+  const f=new File([b],"hidden-games-ermittlertyp.jpg",{type:"image/jpeg"});
+  try{ if(navigator.canShare && navigator.canShare({files:[f]})) await navigator.share({files:[f], text:caption()}); }catch(e){}
+};
+$("captionBtn").onclick=async()=>{
+  try{ await navigator.clipboard.writeText(caption()); }catch(e){}
+  $("copied").textContent=L().captionCopied; $("copied").classList.add("show");
+  setTimeout(()=>$("copied").classList.remove("show"),2200);
+};
+
+initLang();
+renderAll();
+show("intro");
+</script>
+</body>
+</html>
