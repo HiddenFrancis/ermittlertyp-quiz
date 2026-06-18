@@ -347,7 +347,7 @@ const i18n = {
     shareHint:"Lade dein Ergebnis herunter und poste es in deine Story — markiere @hiddengames_original mit #HiddenGamesErmittler, und wir reposten die besten Ermittler!",
     cardKicker:"Mein Ermittlertyp",
     cardCta:"Jetzt selbst testen:",
-    caption:"Ich bin %name! 🕵️ Welcher Ermittlertyp bist du? Mach den Test und finde deinen perfekten Fall. #HiddenGamesErmittler @hiddengames_original",
+    caption:"Ich bin %name! 🕵️ Hahnkes Urteil: »%verdict« — Und du? Mach den Test und finde deinen perfekten Fall. #HiddenGamesErmittler @hiddengames_original",
     amazonBtn:"Bei Amazon kaufen",
     shopBtn:"Im Hidden-Games-Shop kaufen",
     uploadPhoto:"📷 Eigenes Foto einsetzen",
@@ -475,7 +475,7 @@ const i18n = {
     shareHint:"Download your result and post it to your story — tag @hiddengames_international with #HiddenGamesErmittler and we'll repost our favourite detectives!",
     cardKicker:"My detective type",
     cardCta:"Take the test:",
-    caption:"I'm %name! 🕵️ What kind of detective are you? Take the test and find your perfect case. #HiddenGamesErmittler @hiddengames_international",
+    caption:"I'm %name! 🕵️ Roberts' verdict: »%verdict« — And you? Take the test and find your perfect case. #HiddenGamesErmittler @hiddengames_international",
     amazonBtn:"Buy on Amazon",
     uploadPhoto:"📷 Use your own photo",
     removePhoto:"Remove photo",
@@ -584,7 +584,7 @@ const i18n = {
       saveImg:"Salva come immagine", shareImg:"Condividi", shareHead:"Condividi con noi", copyCaption:"Copia didascalia", captionCopied:"Didascalia copiata!",
       shareHint:"Scarica il risultato e pubblicalo nella tua storia — tagga @hiddengames_international con #HiddenGamesErmittler!",
       cardKicker:"Il mio tipo di investigatore", cardCta:"Fai il test:",
-      caption:"Sono %name! 🕵️ Che tipo di investigatore sei? Fai il test e trova il tuo caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acquista su Amazon", host:"Commissario Gallo",
+      caption:"Sono %name! 🕵️ Il verdetto di Gallo: »%verdict« — E tu? Fai il test e trova il tuo caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acquista su Amazon", host:"Commissario Gallo",
       uploadPhoto:"📷 Usa una tua foto", removePhoto:"Rimuovi foto", photoHint:"La tua foto resta sul tuo dispositivo — non viene caricata.", alreadyPlayed:"Questo l'ho già giocato", anotherCase:"Mostra un altro caso", altLabel:"Anche questo fa per te", altRibbon:"Alternativa",
       q:[
        {q:"Un nuovo caso finisce sulla tua scrivania. Cosa fai per prima cosa?",
@@ -680,7 +680,7 @@ const i18n = {
       saveImg:"Enregistrer l'image", shareImg:"Partager", shareHead:"Partage avec nous", copyCaption:"Copier la légende", captionCopied:"Légende copiée !",
       shareHint:"Télécharge ton résultat et publie-le dans ta story — identifie @hiddengames_international avec #HiddenGamesErmittler !",
       cardKicker:"Mon type d'enquêteur", cardCta:"Fais le test :",
-      caption:"Je suis %name ! 🕵️ Quel type d'enquêteur es-tu ? Fais le test et trouve ton affaire. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acheter sur Amazon", host:"Commissaire Fabre",
+      caption:"Je suis %name ! 🕵️ Le verdict de Fabre : »%verdict« — Et toi ? Fais le test et trouve ton affaire. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acheter sur Amazon", host:"Commissaire Fabre",
       uploadPhoto:"📷 Ajouter ta photo", removePhoto:"Retirer la photo", photoHint:"Ta photo reste sur ton appareil — rien n'est envoyé.", alreadyPlayed:"Je l'ai déjà fait", anotherCase:"Voir un autre cas", altLabel:"Aussi pour toi", altRibbon:"Alternative",
       q:[
        {q:"Une nouvelle affaire atterrit sur ton bureau. Que fais-tu en premier ?",
@@ -776,7 +776,7 @@ const i18n = {
       saveImg:"Guardar como imagen", shareImg:"Compartir", shareHead:"Compártelo con nosotros", copyCaption:"Copiar descripción", captionCopied:"¡Descripción copiada!",
       shareHint:"Descarga tu resultado y publícalo en tu historia — etiqueta a @hiddengames_international con #HiddenGamesErmittler!",
       cardKicker:"Mi tipo de investigador", cardCta:"Haz el test:",
-      caption:"¡Soy %name! 🕵️ ¿Qué tipo de investigador eres? Haz el test y encuentra tu caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Comprar en Amazon", host:"Comisario Gallo",
+      caption:"¡Soy %name! 🕵️ El veredicto de Gallo: »%verdict« — ¿Y tú? Haz el test y encuentra tu caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Comprar en Amazon", host:"Comisario Gallo",
       uploadPhoto:"📷 Usa tu propia foto", removePhoto:"Quitar foto", photoHint:"Tu foto se queda en tu dispositivo — no se sube nada.", alreadyPlayed:"Este ya lo he jugado", anotherCase:"Ver otro caso", altLabel:"También para ti", altRibbon:"Alternativa",
       q:[
        {q:"Un nuevo caso llega a tu escritorio. ¿Qué haces primero?",
@@ -864,6 +864,16 @@ const i18n = {
 };
 
 const LANGS=["de","en","it","fr","es"];
+
+/* Hahnkes Urteil je Ergebnistyp, in der Stimme des jeweiligen Gastgebers (Hahnke/Roberts/
+   Gallo/Fabre/Gallo). Wird auf der Ergebnisseite, im Sharepic und in der Caption (%verdict) genutzt. */
+const VERDICTS={
+  de:{1:"Ein Kopf wie ein Uhrwerk – fast unheimlich. Aber brauchbar. Sehr sogar.",2:"Methode, Ordnung und ein Ego, das in keinen Aktenschrank passt. Gefällt mir.",3:"Leise, aufmerksam, unterschätzt – und am Ende haben Sie die Antwort. Stark.",4:"Kein Zögern, kein Drumherum. Manchmal zu forsch – aber Verdächtige reden. Das zählt.",5:"Sie lächeln sich durch jede Tür. Ich behalte trotzdem mein Portemonnaie im Auge.",6:"Während andere raten, beweisen Sie. Geduldig, akribisch – vorbildlich.",7:"Sie lassen nie locker, nicht mal, wenn Sie sollten. Genau so löst man meine Fälle.",rex:"Vier Pfoten, eine Nase, null Smalltalk – und schneller als das halbe Präsidium. Willkommen."},
+  en:{1:"A mind like clockwork — almost unsettling. But usable. Very.",2:"Method, order, and an ego that won't fit in a filing cabinet. I like it.",3:"Quiet, watchful, underestimated — and you've got the answer before anyone notices. Strong.",4:"No hesitation, no fluff. Sometimes too blunt — but suspects talk. That counts.",5:"You smile your way through every door. I'm still keeping an eye on my wallet.",6:"While others guess, you prove. Patient, meticulous — exemplary.",7:"You never let go, not even when you should. That's how my cases get solved.",rex:"Four paws, one nose, zero small talk — and faster than half the precinct. Welcome aboard."},
+  it:{1:"Una mente come un orologio — quasi inquietante. Ma utilizzabile. Eccome.",2:"Metodo, ordine e un ego che non entra in nessuno schedario. Mi piace.",3:"Silenziosi, attenti, sottovalutati — e alla fine la risposta ce l'avete voi. Notevole.",4:"Niente esitazioni, niente giri di parole. A volte troppo diretti — ma i sospettati parlano. Conta questo.",5:"Aprite ogni porta con un sorriso. Io, intanto, tengo d'occhio il portafoglio.",6:"Mentre gli altri tirano a indovinare, voi dimostrate. Pazienti, meticolosi — esemplare.",7:"Non mollate mai, nemmeno quando dovreste. È così che si risolvono i miei casi.",rex:"Quattro zampe, un naso, zero chiacchiere — e più veloci di mezza questura. Benvenuti."},
+  fr:{1:"Un esprit comme une horloge — presque inquiétant. Mais utilisable. Très.",2:"De la méthode, de l'ordre et un ego qui ne tient dans aucun classeur. Ça me plaît.",3:"Discret, attentif, sous-estimé — et au bout du compte, c'est vous qui avez la réponse. Solide.",4:"Pas d'hésitation, pas de blabla. Parfois trop direct — mais les suspects parlent. C'est ce qui compte.",5:"Vous passez chaque porte avec un sourire. Je garde quand même un œil sur mon portefeuille.",6:"Quand les autres devinent, vous prouvez. Patient, méticuleux — exemplaire.",7:"Vous ne lâchez jamais, même quand il le faudrait. C'est comme ça qu'on résout mes affaires.",rex:"Quatre pattes, un flair, zéro bavardage — et plus rapide que la moitié du commissariat. Bienvenue."},
+  es:{1:"Una mente como un reloj — casi inquietante. Pero aprovechable. Y mucho.",2:"Método, orden y un ego que no cabe en ningún archivador. Me gusta.",3:"Callados, atentos, subestimados — y al final la respuesta la tienen ustedes. Notable.",4:"Sin titubeos, sin rodeos. A veces demasiado directos — pero los sospechosos hablan. Eso cuenta.",5:"Se abre cada puerta con una sonrisa. Yo, mientras, vigilo mi cartera.",6:"Mientras otros adivinan, ustedes demuestran. Pacientes, meticulosos — ejemplar.",7:"No sueltan nunca, ni siquiera cuando deberían. Así se resuelven mis casos.",rex:"Cuatro patas, una nariz, cero charla — y más rápidos que media comisaría. Bienvenidos."}
+};
 const PENDING_NOTE={
   de:"🌐 Übersetzung folgt — Fragen und Ergebnisse aktuell auf Englisch.",
   en:"🌐 Translation pending — questions and results currently in English.",
@@ -955,7 +965,11 @@ const REC = {
 let _result=null, _cardBlob=null, _userPhoto=null;
 let _caseCycle=[], _caseIdx=0;
 
-function caption(){ return (L().caption||"").replace("%name", _result?_result.t.name:""); }
+function caption(){
+  if(!_result) return L().caption||"";
+  const v=(VERDICTS[lang]&&VERDICTS[lang][_result.key])||"";
+  return (L().caption||"").replace("%name", _result.t.name).replace("%verdict", v);
+}
 function _spc(x,v){ try{ x.letterSpacing=v; }catch(e){} }
 function _wrap(x,text,maxW){
   const words=text.split(" ");const lines=[];let cur="";
@@ -1061,11 +1075,19 @@ async function buildCard(t, portraitSrcUrl){
   x.fillStyle=GRN;x.font="700 50px Caveat";x.textAlign="center";x.textBaseline="alphabetic";
   x.fillText(t.tag,W/2,tapeY+tapeH/2+62);
 
-  // Footer
-  const by=H-186;x.textAlign="center";
-  x.fillStyle=GRN;x.font="700 40px Oswald";_spc(x,"1px");x.fillText(BRAND.hashtag,W/2,by);_spc(x,"0px");
+  // Footer: Hahnkes Urteil (statt Hashtag) + URL/Handle. Hashtag lebt jetzt in der Caption.
+  x.textAlign="center";
+  const ctaY=H-156;
+  const verdict=(_result&&VERDICTS[lang]&&VERDICTS[lang][_result.key])||"";
+  if(verdict){
+    x.fillStyle="#f2efe4";
+    let vfs=33, vlines=[];
+    for(; vfs>=23; vfs-=2){ x.font="600 "+vfs+"px 'Open Sans'"; vlines=_wrap(x,"\u00bb "+verdict+" \u00ab",W-200); if(vlines.length<=2) break; }
+    const vlh=vfs*1.3, vy0=(ctaY-46)-(vlines.length-1)*vlh;
+    vlines.forEach((ln,i)=>x.fillText(ln,W/2,vy0+i*vlh));
+  }
   x.fillStyle="#9a958a";x.font="400 26px 'Open Sans'";
-  x.fillText((L().cardCta||"")+" "+BRAND.url+"  \u00b7  "+igHandle(lang),W/2,by+44);
+  x.fillText((L().cardCta||"")+" "+BRAND.url+"  \u00b7  "+igHandle(lang),W/2,ctaY);
   // Logo (weiß, Originalproportionen) — sonst Platzhalter
   if(LOGO_DATA && !_logoImg){ await loadLogo(); }
   if(_logoImg){
@@ -1245,7 +1267,7 @@ function renderResult(){
   $("resDesc").textContent=t.desc;
   $("collLabel").textContent=L().collLabel;
   $("resColl").textContent=t.coll;
-  $("resHahnke").textContent=L().hahnke||"";
+  $("resHahnke").textContent=(VERDICTS[lang]&&VERDICTS[lang][key])||L().hahnke||"";
   // Empfehlung + Kauf nur in Märkten mit gepflegtem Sortiment (siehe BUY_MARKETS)
   const hideCase = !BUY_MARKETS.includes(lang);
   $("caseSection").style.display = hideCase ? "none" : "";
