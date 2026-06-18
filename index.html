@@ -38,8 +38,8 @@
 
   /* ---------- top bar ---------- */
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-  .wordmark{font-family:"Oswald";font-weight:700;letter-spacing:.16em;font-size:13px;color:var(--text);text-transform:uppercase;opacity:.85}
-  .wordmark span{color:var(--green)}
+  .logo{height:30px;width:auto;display:block}
+  @media (max-width:420px){ .logo{height:25px} }
   .langs{display:flex;gap:4px;flex-wrap:wrap}
   .langs button{
     font-family:"Oswald";font-weight:600;font-size:12px;letter-spacing:.08em;
@@ -86,6 +86,9 @@
   .sig{font-family:"Caveat";font-weight:700;color:var(--tape);font-size:23px;transform:rotate(-1.5deg);margin:0 0 26px;text-align:right;max-width:48ch}
   .hahnke-note{font-family:"Open Sans";font-style:italic;font-size:14.5px;line-height:1.5;color:var(--text);opacity:.92;border-left:3px solid var(--tape);background:rgba(245,220,36,.05);padding:11px 13px;border-radius:4px;margin:22px 0 2px}
   .meta{font-family:"Oswald";font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:30px}
+  .intro-photo{position:relative;margin:26px -20px -22px;height:230px;border-radius:0 0 7px 7px;overflow:hidden;background:#0c0b09 url('img/intro-foto.jpg') center 40%/cover no-repeat}
+  .intro-photo::before{content:"";position:absolute;left:0;right:0;top:-9px;height:26px;background:url('img/paper-rip.png') center/100% 100% no-repeat}
+  @media (max-width:420px){ .intro-photo{height:178px} }
 
   .btn{
     font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:16px;
@@ -119,27 +122,24 @@
 
   /* ---------- result ---------- */
   .stamp{
-    align-self:flex-start;border:3px solid var(--red);color:var(--red);
-    font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:14px;
-    padding:6px 12px;border-radius:4px;transform:rotate(-7deg);opacity:.92;margin-bottom:14px;
+    position:absolute;top:14px;right:-14px;z-index:4;
+    border:2.5px solid var(--red);color:var(--red);background:rgba(245,240,210,.06);
+    font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px;
+    padding:4px 8px;border-radius:3px;transform:rotate(-11deg);opacity:.95;
   }
   .res-label{font-family:"Oswald";font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:4px}
-  .res-name{font-family:"Oswald";font-weight:700;text-transform:uppercase;line-height:1;font-size:clamp(30px,8vw,46px);color:var(--tape);margin-bottom:6px}
+  .res-head{text-align:center;margin-bottom:22px}
+  .res-name{display:inline-block;background:var(--paper);color:var(--ink);font-family:"Oswald";font-weight:700;text-transform:uppercase;line-height:1.05;font-size:clamp(24px,6.5vw,38px);padding:8px 20px;margin:2px 0 12px;box-shadow:0 7px 20px rgba(0,0,0,.5);transform:rotate(-1deg);border-radius:2px}
   .res-tag{font-family:"Caveat";font-weight:700;font-size:25px;color:var(--green);transform:rotate(-1.5deg);margin-bottom:20px}
   .portrait{
-    width:128px;height:128px;flex:0 0 auto;border:2px solid var(--line);background:
-      repeating-linear-gradient(45deg,#15140f,#15140f 8px,#100f0c 8px,#100f0c 16px);
-    border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;
-    box-shadow:0 8px 20px rgba(0,0,0,.5);
+    width:158px;flex:0 0 auto;position:relative;
+    background:#f0eadd;padding:9px 9px 26px;border-radius:2px;
+    box-shadow:0 12px 26px rgba(0,0,0,.55);transform:rotate(-3deg);
   }
-  .portrait::before{content:"?";font-family:"Oswald";font-weight:700;font-size:48px;color:var(--muted)}
-  .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:5px;display:block}
-  .portrait .pin{z-index:2}
-  .portrait.has-img{background:none}
-  .portrait.has-img::before{content:none}
-  .portrait small{position:absolute;bottom:-22px;left:0;right:0;font-family:"Caveat";font-size:16px;color:var(--muted)}
-  .intro-portrait{margin:6px auto 28px}
-  .pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+  .portrait img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;background:#15140f}
+  .portrait.has-img{background:#f0eadd}
+  .portrait small{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:"Caveat";font-size:16px;color:#6b6457}
+  .portrait .pin{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:30px;height:27px;background:url('img/pin.png') center/contain no-repeat;z-index:5;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
   .res-top{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-bottom:24px}
   .res-body{flex:1;min-width:220px}
   .res-desc{font-size:15.5px;opacity:.9;margin-bottom:18px}
@@ -150,8 +150,8 @@
     position:relative;background:var(--paper);color:#1c1a15;border-radius:6px;padding:18px 18px 20px;
     box-shadow:0 10px 26px rgba(0,0,0,.5);transform:rotate(-.6deg);margin-top:8px;
   }
-  .casecard .ribbon{position:absolute;top:10px;right:-6px;background:var(--red);color:#fff;font-family:"Oswald";font-weight:700;
-    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;transform:rotate(3deg);box-shadow:0 3px 8px rgba(0,0,0,.4)}
+  .casecard .ribbon{position:absolute;top:10px;right:-6px;background:var(--green);color:#0a0a09;font-family:"Oswald";font-weight:700;
+    font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 11px;transform:rotate(2deg);box-shadow:0 3px 8px rgba(0,0,0,.4);border-radius:2px}
   .casecard .ct-label{font-family:"Oswald";font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--red);margin-bottom:4px}
   .casecard .ct-title{font-family:"Oswald";font-weight:700;font-size:22px;line-height:1.05;margin-bottom:6px}
   .casecard .ct-blurb{font-size:14.5px;line-height:1.5}
@@ -163,7 +163,10 @@
   .casecard .alt-btn:hover{background:rgba(28,26,21,.08);border-color:#1c1a15}
   .photo-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px}
   .photo-hint{font-family:"Open Sans";font-size:12.5px;color:var(--muted);text-align:center;margin-top:8px}
-  .share-hint{font-family:"Open Sans";font-size:13.5px;line-height:1.5;color:var(--text);opacity:.92;background:rgba(180,220,65,.07);border-left:3px solid var(--green);padding:11px 13px;border-radius:4px;margin:26px 0 4px}
+  .case-head{font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(18px,4.6vw,24px);color:var(--green);text-align:center;margin:30px 0 14px}
+  .divider{height:1px;background:var(--line);margin:30px 0 0}
+  .share-head{font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(26px,7vw,40px);color:var(--green);line-height:1;margin:24px 0 10px}
+  .share-hint{font-family:"Open Sans";font-size:14px;line-height:1.55;color:var(--text);opacity:.85;margin:0 0 6px}
   .card-preview-wrap{display:flex;justify-content:center;margin:16px 0 4px;min-height:40px}
   #cardPreview{width:100%;max-width:300px;border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.55);opacity:0;transition:opacity .35s}
   #cardPreview.ready{opacity:1}
@@ -178,8 +181,9 @@
   .hidden{display:none !important}
 
   @media (max-width:420px){
-    .res-top{gap:16px}
-    .portrait{width:104px;height:104px}
+    .res-top{gap:14px}
+    .portrait{width:120px}
+    .res-body{min-width:0}
   }
   @media (prefers-reduced-motion:reduce){
     *{transition:none !important;animation:none !important}
@@ -192,7 +196,8 @@
 <div class="wrap">
 
   <div class="topbar">
-    <div class="wordmark">HIDDEN<span>GAMES</span></div>
+    <img class="logo" src="img/logo.png" alt="Hidden Games">
+
     <nav class="langs" id="langs" aria-label="Sprache"></nav>
   </div>
 
@@ -208,8 +213,8 @@
       <p class="lead" id="introLead"></p>
       <div class="sig" id="introSig"></div>
       <div class="meta" id="introMeta"></div>
-      <div class="portrait intro-portrait" id="introPic"><span class="pin"></span><small id="introPicNote"></small></div>
       <button class="btn" id="startBtn"></button>
+      <div class="intro-photo" aria-hidden="true"></div>
     </section>
 
     <!-- ===== QUIZ ===== -->
@@ -229,12 +234,13 @@
 
     <!-- ===== RESULT ===== -->
     <section id="screen-result" class="card hidden">
-      <div class="stamp" id="stamp"></div>
-      <div class="res-label" id="resLabel"></div>
-      <div class="res-name" id="resName"></div>
-      <div class="res-tag" id="resTag"></div>
+      <div class="res-head">
+        <div class="res-label" id="resLabel"></div>
+        <div class="res-name" id="resName"></div>
+        <div class="res-tag" id="resTag"></div>
+      </div>
       <div class="res-top">
-        <div class="portrait" id="resultPortrait"><span class="pin"></span><small id="portraitNote"></small></div>
+        <div class="portrait" id="resultPortrait"><span class="pin"></span><div class="stamp" id="stamp"></div><small id="portraitNote"></small></div>
         <div class="res-body">
           <div class="res-desc" id="resDesc"></div>
           <div class="block-label" id="collLabel"></div>
@@ -242,19 +248,23 @@
         </div>
       </div>
       <div class="hahnke-note" id="resHahnke"></div>
-      <div class="casecard" id="caseCard">
-        <span class="ribbon" id="caseRibbon"></span>
-        <div class="ct-row">
-          <img class="ct-img" id="caseImg" alt="" hidden>
-          <div class="ct-text">
-            <div class="ct-label" id="caseLabel"></div>
-            <div class="ct-title" id="caseTitle"></div>
-            <div class="ct-blurb" id="caseBlurb"></div>
+      <div id="caseSection">
+        <div class="case-head" id="caseLabel"></div>
+        <div class="casecard" id="caseCard">
+          <span class="ribbon" id="caseRibbon"></span>
+          <div class="ct-row">
+            <img class="ct-img" id="caseImg" alt="" hidden>
+            <div class="ct-text">
+              <div class="ct-title" id="caseTitle"></div>
+              <div class="ct-blurb" id="caseBlurb"></div>
+              <div class="buy-actions" id="buyActions"></div>
+            </div>
           </div>
+          <button class="alt-btn" id="altBtn" type="button"></button>
         </div>
-        <button class="alt-btn" id="altBtn" type="button"></button>
       </div>
-      <div class="buy-actions" id="buyActions"></div>
+      <div class="divider"></div>
+      <div class="share-head" id="shareHead"></div>
       <div class="share-hint" id="shareHint"></div>
       <div class="photo-actions">
         <button class="btn ghost" id="photoBtn" type="button"></button>
@@ -331,6 +341,7 @@ const i18n = {
     copied:"Link kopiert!",
     saveImg:"Als Bild speichern",
     shareImg:"Teilen",
+    shareHead:"Teil dein Ergebnis",
     copyCaption:"Caption kopieren",
     captionCopied:"Caption kopiert!",
     shareHint:"Lade dein Ergebnis herunter und poste es in deine Story — markiere @hiddengames_original mit #HiddenGamesErmittler, und wir reposten die besten Ermittler!",
@@ -458,6 +469,7 @@ const i18n = {
     copied:"Link copied!",
     saveImg:"Save as image",
     shareImg:"Share",
+    shareHead:"Share with us",
     copyCaption:"Copy caption",
     captionCopied:"Caption copied!",
     shareHint:"Download your result and post it to your story — tag @hiddengames_international with #HiddenGamesErmittler and we'll repost our favourite detectives!",
@@ -569,7 +581,7 @@ const i18n = {
       stamp:"Caso chiuso", resLabel:"Il tuo tipo di investigatore", portraitNote:"caricatura in arrivo",
       collLabel:"I tuoi spiriti affini", caseLabel:"Il tuo caso perfetto", caseRibbon:"Consigliato",
       restart:"Indaga di nuovo", share:"Condividi il test", copied:"Link copiato!",
-      saveImg:"Salva come immagine", shareImg:"Condividi", copyCaption:"Copia didascalia", captionCopied:"Didascalia copiata!",
+      saveImg:"Salva come immagine", shareImg:"Condividi", shareHead:"Condividi con noi", copyCaption:"Copia didascalia", captionCopied:"Didascalia copiata!",
       shareHint:"Scarica il risultato e pubblicalo nella tua storia — tagga @hiddengames_international con #HiddenGamesErmittler!",
       cardKicker:"Il mio tipo di investigatore", cardCta:"Fai il test:",
       caption:"Sono %name! 🕵️ Che tipo di investigatore sei? Fai il test e trova il tuo caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acquista su Amazon", host:"Commissario Gallo",
@@ -665,7 +677,7 @@ const i18n = {
       stamp:"Affaire classée", resLabel:"Ton type d'enquêteur", portraitNote:"caricature à venir",
       collLabel:"Tes esprits frères", caseLabel:"Ton affaire idéale", caseRibbon:"Recommandé",
       restart:"Enquêter à nouveau", share:"Partager le test", copied:"Lien copié !",
-      saveImg:"Enregistrer l'image", shareImg:"Partager", copyCaption:"Copier la légende", captionCopied:"Légende copiée !",
+      saveImg:"Enregistrer l'image", shareImg:"Partager", shareHead:"Partage avec nous", copyCaption:"Copier la légende", captionCopied:"Légende copiée !",
       shareHint:"Télécharge ton résultat et publie-le dans ta story — identifie @hiddengames_international avec #HiddenGamesErmittler !",
       cardKicker:"Mon type d'enquêteur", cardCta:"Fais le test :",
       caption:"Je suis %name ! 🕵️ Quel type d'enquêteur es-tu ? Fais le test et trouve ton affaire. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acheter sur Amazon", host:"Commissaire Fabre",
@@ -761,7 +773,7 @@ const i18n = {
       stamp:"Caso cerrado", resLabel:"Tu tipo de investigador", portraitNote:"caricatura en camino",
       collLabel:"Tus espíritus afines", caseLabel:"Tu caso perfecto", caseRibbon:"Recomendado",
       restart:"Investigar de nuevo", share:"Compartir el test", copied:"¡Enlace copiado!",
-      saveImg:"Guardar como imagen", shareImg:"Compartir", copyCaption:"Copiar descripción", captionCopied:"¡Descripción copiada!",
+      saveImg:"Guardar como imagen", shareImg:"Compartir", shareHead:"Compártelo con nosotros", copyCaption:"Copiar descripción", captionCopied:"¡Descripción copiada!",
       shareHint:"Descarga tu resultado y publícalo en tu historia — etiqueta a @hiddengames_international con #HiddenGamesErmittler!",
       cardKicker:"Mi tipo de investigador", cardCta:"Haz el test:",
       caption:"¡Soy %name! 🕵️ ¿Qué tipo de investigador eres? Haz el test y encuentra tu caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Comprar en Amazon", host:"Comisario Gallo",
@@ -904,7 +916,7 @@ function igHandle(lang){ return lang==="de" ? BRAND.ig.de : BRAND.ig.int; }
 
 /* Offizielles weißes Logo als data:image/png;base64,... hier einsetzen (Originalproportionen, nur Weiß).
    Solange leer, zeigt das Sharepic einen Logo-Platzhalter. */
-const LOGO_DATA="";
+const LOGO_DATA="img/logo.png";   /* offizielles weißes Logo (von Bea) */
 let _logoImg=null;
 function loadLogo(){return new Promise(res=>{if(!LOGO_DATA){res(null);return;}const im=new Image();im.onload=()=>{_logoImg=im;res(im);};im.onerror=()=>res(null);im.src=LOGO_DATA;});}
 
@@ -1057,8 +1069,8 @@ async function buildCard(t, portraitSrcUrl){
   // Logo (weiß, Originalproportionen) — sonst Platzhalter
   if(LOGO_DATA && !_logoImg){ await loadLogo(); }
   if(_logoImg){
-    const lw=300, lh=lw*(_logoImg.height/_logoImg.width||0.28);
-    x.drawImage(_logoImg, W/2-lw/2, H-72-lh/2, lw, lh);
+    const lw=150, lh=lw*(_logoImg.height/_logoImg.width||0.5);
+    x.drawImage(_logoImg, W/2-lw/2, H-46-lh, lw, lh);
   } else {
     // Fallback: weißer Wortmarken-Schriftzug (offizielles weißes Logo via LOGO_DATA einsetzbar)
     x.fillStyle="#f2efe4";x.textAlign="center";x.textBaseline="middle";x.font="700 46px Oswald";_spc(x,"8px");
@@ -1114,8 +1126,6 @@ function renderIntro(){
   $("introSig").textContent=L().sig||"";
   $("introMeta").textContent=L().meta;
   $("startBtn").textContent=L().start;
-  setPortrait($("introPic"), HAHNKE_SRC);          // Hahnke von hinten (sprachneutral)
-  $("introPicNote").textContent=L().host||"";
 }
 
 function renderQuestion(){
@@ -1238,8 +1248,7 @@ function renderResult(){
   $("resHahnke").textContent=L().hahnke||"";
   // Empfehlung + Kauf nur in Märkten mit gepflegtem Sortiment (siehe BUY_MARKETS)
   const hideCase = !BUY_MARKETS.includes(lang);
-  $("caseCard").style.display = hideCase ? "none" : "";
-  $("buyActions").style.display = hideCase ? "none" : "";
+  $("caseSection").style.display = hideCase ? "none" : "";
   // Fall-Empfehlung als Zyklus: Platz 1 = bester Fall; "Schon gespielt" zeigt den Fall
   // des nächststärksten Ermittlertyps (Spieler-Feedback). renderCase füllt die Karte.
   _caseCycle = caseCycleFor();
@@ -1252,6 +1261,7 @@ function renderResult(){
   $("shareImgBtn").textContent=L().shareImg;
   $("shareImgBtn").hidden = !(navigator.canShare);
   $("captionBtn").textContent=L().copyCaption;
+  $("shareHead").textContent=L().shareHead||"";
   $("shareHint").textContent=L().shareHint;
   // Eigenes-Foto-Schaltflächen (Foto landet nur im Teilen-Bild und bleibt auf dem Gerät)
   $("photoBtn").textContent=L().uploadPhoto||"📷 Eigenes Foto";
