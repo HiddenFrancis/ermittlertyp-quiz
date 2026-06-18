@@ -106,7 +106,7 @@
   .qcount{font-family:"Oswald";font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--green);white-space:nowrap}
   .bar{flex:1;height:8px;background:rgba(245,240,210,.1);border-radius:99px;overflow:hidden}
   .bar > i{display:block;height:100%;width:0;background:var(--green);transition:width .35s ease}
-  .qno{font-family:"Caveat";font-weight:700;color:var(--muted);font-size:20px;transform:rotate(-3deg);margin:14px 0 2px}
+  .qno{font-family:"Caveat";font-weight:700;color:var(--green);font-size:20px;transform:rotate(-3deg);margin:14px 0 2px}
   .question{font-family:"Oswald";font-weight:600;font-size:clamp(22px,5.5vw,30px);line-height:1.12;text-transform:none;margin-bottom:20px}
   .opts{display:flex;flex-direction:column;gap:11px}
   .opt{
@@ -127,7 +127,7 @@
     font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px;
     padding:4px 8px;border-radius:3px;transform:rotate(-11deg);opacity:.95;
   }
-  .res-label{font-family:"Oswald";font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:4px}
+  .res-label{font-family:"Oswald";font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--green);margin-bottom:4px}
   .res-head{text-align:center;margin-bottom:22px}
   .res-name{display:inline-block;background:var(--paper);color:var(--ink);font-family:"Oswald";font-weight:700;text-transform:uppercase;line-height:1.05;font-size:clamp(24px,6.5vw,38px);padding:8px 20px;margin:2px 0 12px;box-shadow:0 7px 20px rgba(0,0,0,.5);transform:rotate(-1deg);border-radius:2px}
   .res-tag{font-family:"Caveat";font-weight:700;font-size:25px;color:var(--green);transform:rotate(-1.5deg);margin-bottom:20px}
@@ -196,7 +196,7 @@
 <div class="wrap">
 
   <div class="topbar">
-    <img class="logo" src="img/logo.png" alt="Hidden Games">
+    <img class="logo" src="img/logo.svg" alt="Hidden Games">
 
     <nav class="langs" id="langs" aria-label="Sprache"></nav>
   </div>
@@ -916,7 +916,7 @@ function igHandle(lang){ return lang==="de" ? BRAND.ig.de : BRAND.ig.int; }
 
 /* Offizielles weißes Logo als data:image/png;base64,... hier einsetzen (Originalproportionen, nur Weiß).
    Solange leer, zeigt das Sharepic einen Logo-Platzhalter. */
-const LOGO_DATA="img/logo.png";   /* offizielles weißes Logo (von Bea) */
+const LOGO_DATA="img/logo.svg";   /* offizielles weißes CI-Logo (SVG, aus CI-Skill) */
 let _logoImg=null;
 function loadLogo(){return new Promise(res=>{if(!LOGO_DATA){res(null);return;}const im=new Image();im.onload=()=>{_logoImg=im;res(im);};im.onerror=()=>res(null);im.src=LOGO_DATA;});}
 
