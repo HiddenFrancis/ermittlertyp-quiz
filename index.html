@@ -159,6 +159,10 @@
   .casecard .ct-text{flex:1;min-width:0}
   .casecard .ct-img{width:104px;flex:0 0 auto;height:auto;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.35);background:#e4ded0}
   @media (max-width:420px){ .casecard .ct-img{width:82px} }
+  .casecard .alt-btn{margin-top:14px;font-family:"Oswald";font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px;background:transparent;border:1px solid rgba(28,26,21,.4);color:#1c1a15;padding:7px 12px;border-radius:4px;cursor:pointer;transition:.14s}
+  .casecard .alt-btn:hover{background:rgba(28,26,21,.08);border-color:#1c1a15}
+  .photo-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+  .photo-hint{font-family:"Open Sans";font-size:12.5px;color:var(--muted);text-align:center;margin-top:8px}
   .share-hint{font-family:"Open Sans";font-size:13.5px;line-height:1.5;color:var(--text);opacity:.92;background:rgba(180,220,65,.07);border-left:3px solid var(--green);padding:11px 13px;border-radius:4px;margin:26px 0 4px}
   .card-preview-wrap{display:flex;justify-content:center;margin:16px 0 4px;min-height:40px}
   #cardPreview{width:100%;max-width:300px;border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.55);opacity:0;transition:opacity .35s}
@@ -248,9 +252,16 @@
             <div class="ct-blurb" id="caseBlurb"></div>
           </div>
         </div>
+        <button class="alt-btn" id="altBtn" type="button"></button>
       </div>
       <div class="buy-actions" id="buyActions"></div>
       <div class="share-hint" id="shareHint"></div>
+      <div class="photo-actions">
+        <button class="btn ghost" id="photoBtn" type="button"></button>
+        <button class="btn ghost" id="photoResetBtn" type="button" hidden></button>
+        <input type="file" id="photoInput" accept="image/*" hidden>
+      </div>
+      <div class="photo-hint" id="photoHint"></div>
       <div class="card-preview-wrap"><img id="cardPreview" alt=""></div>
       <div class="res-actions">
         <button class="btn" id="saveBtn"></button>
@@ -328,6 +339,13 @@ const i18n = {
     caption:"Ich bin %name! 🕵️ Welcher Ermittlertyp bist du? Mach den Test und finde deinen perfekten Fall. #HiddenGamesErmittler @hiddengames_original",
     amazonBtn:"Bei Amazon kaufen",
     shopBtn:"Im Hidden-Games-Shop kaufen",
+    uploadPhoto:"📷 Eigenes Foto einsetzen",
+    removePhoto:"Foto entfernen",
+    photoHint:"Dein Foto bleibt auf deinem Gerät – es wird nichts hochgeladen.",
+    alreadyPlayed:"Das kenne ich schon",
+    anotherCase:"Noch einen anderen Fall",
+    altLabel:"Auch interessant für dich",
+    altRibbon:"Alternative",
     q:[
       {q:"Ein neuer Fall landet auf deinem Schreibtisch. Was tust du zuerst?",
        a:["Die Akte von vorn bis hinten lesen und jedes Detail markieren.",
@@ -447,6 +465,13 @@ const i18n = {
     cardCta:"Take the test:",
     caption:"I'm %name! 🕵️ What kind of detective are you? Take the test and find your perfect case. #HiddenGamesErmittler @hiddengames_international",
     amazonBtn:"Buy on Amazon",
+    uploadPhoto:"📷 Use your own photo",
+    removePhoto:"Remove photo",
+    photoHint:"Your photo stays on your device — nothing is uploaded.",
+    alreadyPlayed:"Already played this one",
+    anotherCase:"Show another case",
+    altLabel:"Also up your alley",
+    altRibbon:"Alternative",
     q:[
       {q:"A new case lands on your desk. What do you do first?",
        a:["Read the file cover to cover and flag every detail.",
@@ -548,6 +573,7 @@ const i18n = {
       shareHint:"Scarica il risultato e pubblicalo nella tua storia — tagga @hiddengames_international con #HiddenGamesErmittler!",
       cardKicker:"Il mio tipo di investigatore", cardCta:"Fai il test:",
       caption:"Sono %name! 🕵️ Che tipo di investigatore sei? Fai il test e trova il tuo caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acquista su Amazon", host:"Commissario Gallo",
+      uploadPhoto:"📷 Usa una tua foto", removePhoto:"Rimuovi foto", photoHint:"La tua foto resta sul tuo dispositivo — non viene caricata.", alreadyPlayed:"Questo l'ho già giocato", anotherCase:"Mostra un altro caso", altLabel:"Anche questo fa per te", altRibbon:"Alternativa",
       q:[
        {q:"Un nuovo caso finisce sulla tua scrivania. Cosa fai per prima cosa?",
         a:["Leggo il fascicolo da cima a fondo e segno ogni dettaglio.",
@@ -643,6 +669,7 @@ const i18n = {
       shareHint:"Télécharge ton résultat et publie-le dans ta story — identifie @hiddengames_international avec #HiddenGamesErmittler !",
       cardKicker:"Mon type d'enquêteur", cardCta:"Fais le test :",
       caption:"Je suis %name ! 🕵️ Quel type d'enquêteur es-tu ? Fais le test et trouve ton affaire. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Acheter sur Amazon", host:"Commissaire Fabre",
+      uploadPhoto:"📷 Ajouter ta photo", removePhoto:"Retirer la photo", photoHint:"Ta photo reste sur ton appareil — rien n'est envoyé.", alreadyPlayed:"Je l'ai déjà fait", anotherCase:"Voir un autre cas", altLabel:"Aussi pour toi", altRibbon:"Alternative",
       q:[
        {q:"Une nouvelle affaire atterrit sur ton bureau. Que fais-tu en premier ?",
         a:["Je lis le dossier de bout en bout et je note chaque détail.",
@@ -738,6 +765,7 @@ const i18n = {
       shareHint:"Descarga tu resultado y publícalo en tu historia — etiqueta a @hiddengames_international con #HiddenGamesErmittler!",
       cardKicker:"Mi tipo de investigador", cardCta:"Haz el test:",
       caption:"¡Soy %name! 🕵️ ¿Qué tipo de investigador eres? Haz el test y encuentra tu caso. #HiddenGamesErmittler @hiddengames_international", amazonBtn:"Comprar en Amazon", host:"Comisario Gallo",
+      uploadPhoto:"📷 Usa tu propia foto", removePhoto:"Quitar foto", photoHint:"Tu foto se queda en tu dispositivo — no se sube nada.", alreadyPlayed:"Este ya lo he jugado", anotherCase:"Ver otro caso", altLabel:"También para ti", altRibbon:"Alternativa",
       q:[
        {q:"Un nuevo caso llega a tu escritorio. ¿Qué haces primero?",
         a:["Leo el expediente de principio a fin y marco cada detalle.",
@@ -912,7 +940,8 @@ const REC = {
   fr: { 6:4, 7:1 },       // Glutspur→La mort en vert · Schatten der Zeit→Traversée mortelle
   es: { 3:2, 6:4, 7:1 },  // Eiskaltes Verbr.(bald)→Un plan perfecto · Glutspur→Una solución venenosa · Schatten der Zeit→Una travesía fatal
 };
-let _result=null, _cardBlob=null;
+let _result=null, _cardBlob=null, _userPhoto=null;
+let _caseCycle=[], _caseIdx=0;
 
 function caption(){ return (L().caption||"").replace("%name", _result?_result.t.name:""); }
 function _spc(x,v){ try{ x.letterSpacing=v; }catch(e){} }
@@ -972,7 +1001,9 @@ async function buildCard(t, portraitSrcUrl){
   x.fillStyle="#efeae0";x.fillRect(-ps/2-fb,-ps/2-fb,ps+2*fb,ps+2*fb);
   x.save();x.beginPath();x.rect(-ps/2,-ps/2,ps,ps);x.clip();
   if(portraitImg){
-    x.drawImage(portraitImg,-ps/2,-ps/2,ps,ps);   // quadratisches Porträt rotiert ins gekippte Bildfeld
+    // formatfüllend (cover) ins quadratische Feld – verzerrt eigene Hochformat-Fotos nicht
+    const iw=portraitImg.width, ih=portraitImg.height, sq=Math.min(iw,ih);
+    x.drawImage(portraitImg,(iw-sq)/2,(ih-sq)/2,sq,sq, -ps/2,-ps/2,ps,ps);
   } else {
     x.fillStyle="#15140f";x.fillRect(-ps/2,-ps/2,ps,ps);
     x.strokeStyle="#100f0c";x.lineWidth=12;
@@ -1039,14 +1070,14 @@ async function generateCard(){
   if(!_result) return; _cardBlob=null;
   const img=$("cardPreview"); img.classList.remove("ready");
   try{
-    const c=await buildCard(_result.t, _result.portrait);
+    const c=await buildCard(_result.t, _userPhoto||_result.portrait);
     img.src=c.toDataURL("image/jpeg",0.92); img.classList.add("ready");
     c.toBlob(b=>{ _cardBlob=b; },"image/jpeg",0.92);
   }catch(e){}
 }
 async function getCardBlob(){
   if(_cardBlob) return _cardBlob;
-  const c=await buildCard(_result.t, _result.portrait);
+  const c=await buildCard(_result.t, _userPhoto||_result.portrait);
   return await new Promise(r=>c.toBlob(r,"image/jpeg",0.92));
 }
 function downloadBlob(b,name){
@@ -1112,7 +1143,7 @@ function renderQuestion(){
   $("nextBtn").disabled = answers[qi]===null;
 }
 
-function computeResult(){
+function scoreAnswers(){
   const score={1:0,2:0,3:0,4:0,5:0,6:0,7:0,r:0};
   const primary={1:0,2:0,3:0,4:0,5:0,6:0,7:0,r:0}; // wie oft war ein Typ die Haupt-Aussage einer gewählten Antwort
   answers.forEach((opt,i)=>{
@@ -1122,6 +1153,10 @@ function computeResult(){
     for(const k in s){ score[k]+=s[k]; if(s[k]>topV){ topV=s[k]; topK=k; } }
     if(topK!=null) primary[topK]++;
   });
+  return {score, primary};
+}
+function computeResult(){
+  const {score, primary}=scoreAnswers();
   if(score.r>=REX_THRESHOLD) return "rex";
   // Gewinner = höchste Punktzahl. Bei Gleichstand entscheidet das stärkere Signal
   // (wie oft der Typ Haupt-Aussage einer gewählten Antwort war), erst danach die feste
@@ -1134,14 +1169,62 @@ function computeResult(){
   });
   return best;
 }
+/* Alle Ergebnis-Schlüssel (1..7 + "rex") nach Passung sortiert, bester zuerst.
+   Konsistent mit computeResult: Rex steht nur auf Platz 1, wenn die Rex-Schwelle erreicht ist. */
+function rankedKeys(){
+  const {score, primary}=scoreAnswers();
+  const sc=k=>k==="rex"?score.r:score[k];
+  const pr=k=>k==="rex"?primary.r:primary[k];
+  const ti=k=>k==="rex"?99:TIE_ORDER.indexOf(k);
+  const nums=[1,2,3,4,5,6,7].sort((a,b)=> sc(b)-sc(a) || pr(b)-pr(a) || ti(a)-ti(b));
+  if(score.r>=REX_THRESHOLD) return ["rex",...nums];
+  const out=[...nums]; let pos=out.length;
+  for(let i=1;i<out.length;i++){ if(sc("rex")>sc(out[i])){ pos=i; break; } }
+  out.splice(pos,0,"rex");
+  return out;
+}
+/* Fall-Empfehlungs-Zyklus: Ranked Types → Fälle (REC-Remap pro Markt), Duplikate raus.
+   Erster Eintrag = beste Empfehlung; weitere = Alternativen für "Schon gespielt". */
+function caseCycleFor(){
+  const seen=new Set(), cyc=[];
+  rankedKeys().forEach(k=>{
+    const rk=(REC[lang] && REC[lang][k]!=null) ? REC[lang][k] : k;
+    const ck=String(rk);
+    if(!seen.has(ck)){ seen.add(ck); cyc.push(rk); }
+  });
+  return cyc;
+}
+/* Füllt die Fall-Karte (Label/Ribbon/Titel/Blurb/Keyvisual/Kauf-Buttons) für einen Fall-Schlüssel. */
+function renderCase(caseKey, isAlt){
+  const cs = (String(caseKey)==="rex") ? C().cases.rex : C().cases[caseKey];
+  $("caseLabel").textContent = isAlt ? (L().altLabel||L().caseLabel) : L().caseLabel;
+  $("caseRibbon").textContent = isAlt ? (L().altRibbon||L().caseRibbon) : L().caseRibbon;
+  $("caseTitle").textContent = cs.title;
+  $("caseBlurb").textContent = cs.blurb;
+  const buy = BUY[caseKey] || {};
+  const amzn = (buy.amazon||{})[lang] || "";
+  let bhtml = "";
+  if(amzn) bhtml += '<a class="btn buy" href="'+amzn+'" target="_blank" rel="noopener">🛒 '+(L().amazonBtn||"Amazon")+'</a>';
+  if(lang==="de" && buy.shopDe) bhtml += '<a class="btn buy ghost" href="'+buy.shopDe+'" target="_blank" rel="noopener">'+(L().shopBtn||"Shop")+'</a>';
+  $("buyActions").innerHTML = bhtml;
+  const cimg=$("caseImg"); cimg.hidden=true;
+  cimg.alt=cs.title;
+  cimg.onload=()=>{ cimg.hidden=false; };
+  cimg.onerror=()=>{ cimg.hidden=true; };
+  cimg.src=caseImgSrc(caseKey);
+}
+/* "Das kenne ich schon" → nächsten Fall im Zyklus zeigen (springt am Ende zurück zur Empfehlung). */
+function showNextCase(){
+  if(_caseCycle.length<2) return;
+  _caseIdx=(_caseIdx+1)%_caseCycle.length;
+  renderCase(_caseCycle[_caseIdx], _caseIdx!==0);
+  $("altBtn").textContent = (_caseIdx===0 ? (L().alreadyPlayed||"Schon gespielt") : (L().anotherCase||"Anderer Fall"));
+}
 
 function renderResult(){
   const key=computeResult();
   const isRex = key==="rex";
   const t = isRex ? C().rex : C().types[key];
-  // Empfohlener Fall pro Markt: Lückentypen auf verfügbare Fälle umbiegen (REC)
-  const recKey = (REC[lang] && REC[lang][key]!=null) ? REC[lang][key] : key;
-  const cs = (recKey==="rex") ? C().cases.rex : C().cases[recKey];
   $("barfill").style.width="100%";
   $("stamp").textContent=L().stamp;
   $("resLabel").textContent=L().resLabel;
@@ -1153,36 +1236,28 @@ function renderResult(){
   $("collLabel").textContent=L().collLabel;
   $("resColl").textContent=t.coll;
   $("resHahnke").textContent=L().hahnke||"";
-  $("caseLabel").textContent=L().caseLabel;
-  $("caseRibbon").textContent=L().caseRibbon;
-  $("caseTitle").textContent=cs.title;
-  $("caseBlurb").textContent=cs.blurb;
-  // Kauf-Buttons: Amazon (alle Märkte) + Shop (nur DE); leere URL = Button aus
-  const buy = BUY[recKey] || {};
-  const amzn = (buy.amazon||{})[lang] || "";
-  let bhtml = "";
-  if(amzn) bhtml += '<a class="btn buy" href="'+amzn+'" target="_blank" rel="noopener">🛒 '+(L().amazonBtn||"Amazon")+'</a>';
-  if(lang==="de" && buy.shopDe) bhtml += '<a class="btn buy ghost" href="'+buy.shopDe+'" target="_blank" rel="noopener">'+(L().shopBtn||"Shop")+'</a>';
-  $("buyActions").innerHTML = bhtml;
   // Empfehlung + Kauf nur in Märkten mit gepflegtem Sortiment (siehe BUY_MARKETS)
   const hideCase = !BUY_MARKETS.includes(lang);
   $("caseCard").style.display = hideCase ? "none" : "";
   $("buyActions").style.display = hideCase ? "none" : "";
-  // Spiel-Keyvisual neben Titel + Beschreibung (Bea-Feedback). Fehlt die Bilddatei,
-  // bleibt das <img> per onerror ausgeblendet und der Text steht wie bisher allein.
-  const cimg=$("caseImg"); cimg.hidden=true;
-  if(!hideCase){
-    cimg.alt=cs.title;
-    cimg.onload=()=>{ cimg.hidden=false; };
-    cimg.onerror=()=>{ cimg.hidden=true; };
-    cimg.src=caseImgSrc(recKey);
-  }
+  // Fall-Empfehlung als Zyklus: Platz 1 = bester Fall; "Schon gespielt" zeigt den Fall
+  // des nächststärksten Ermittlertyps (Spieler-Feedback). renderCase füllt die Karte.
+  _caseCycle = caseCycleFor();
+  _caseIdx = 0;
+  renderCase(_caseCycle[0], false);
+  $("altBtn").textContent = L().alreadyPlayed || "Schon gespielt";
+  $("altBtn").style.display = (!hideCase && _caseCycle.length>1) ? "" : "none";
   $("restartBtn").textContent=L().restart;
   $("saveBtn").textContent="📸 "+L().saveImg;
   $("shareImgBtn").textContent=L().shareImg;
   $("shareImgBtn").hidden = !(navigator.canShare);
   $("captionBtn").textContent=L().copyCaption;
   $("shareHint").textContent=L().shareHint;
+  // Eigenes-Foto-Schaltflächen (Foto landet nur im Teilen-Bild und bleibt auf dem Gerät)
+  $("photoBtn").textContent=L().uploadPhoto||"📷 Eigenes Foto";
+  $("photoResetBtn").textContent=L().removePhoto||"Foto entfernen";
+  $("photoResetBtn").hidden = !_userPhoto;
+  $("photoHint").textContent=L().photoHint||"";
   $("copied").classList.remove("show");
   _result={ t:t, isRex:isRex, key:key, portrait:portraitSrc(key) };
   generateCard();
@@ -1204,7 +1279,7 @@ function renderAll(){
 }
 
 /* ---- 5) FLOW ------------------------------------------------------------ */
-function start(){ qi=0; answers.fill(null); buildOrder(); renderQuestion(); show("quiz"); }
+function start(){ qi=0; answers.fill(null); buildOrder(); _userPhoto=null; renderQuestion(); show("quiz"); }
 function next(){
   if(answers[qi]===null) return;
   if(qi<Q.length-1){ qi++; renderQuestion(); show("quiz"); }
@@ -1240,6 +1315,20 @@ $("captionBtn").onclick=async()=>{
   try{ await navigator.clipboard.writeText(caption()); }catch(e){}
   $("copied").textContent=L().captionCopied; $("copied").classList.add("show");
   setTimeout(()=>$("copied").classList.remove("show"),2200);
+};
+$("altBtn").onclick=showNextCase;
+$("photoBtn").onclick=()=>$("photoInput").click();
+$("photoInput").onchange=e=>{
+  const f=e.target.files&&e.target.files[0]; if(!f) return;
+  if(_userPhoto){ try{ URL.revokeObjectURL(_userPhoto); }catch(_){ } }
+  _userPhoto=URL.createObjectURL(f);
+  $("photoResetBtn").hidden=false;
+  generateCard();
+  e.target.value="";   // erlaubt erneutes Wählen derselben Datei
+};
+$("photoResetBtn").onclick=()=>{
+  if(_userPhoto){ try{ URL.revokeObjectURL(_userPhoto); }catch(_){ } }
+  _userPhoto=null; $("photoResetBtn").hidden=true; generateCard();
 };
 
 initLang();
