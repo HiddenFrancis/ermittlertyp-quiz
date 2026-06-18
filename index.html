@@ -44,10 +44,10 @@
   .langs button{
     font-family:"Oswald";font-weight:600;font-size:12px;letter-spacing:.08em;
     background:transparent;color:var(--muted);border:1px solid var(--line);
-    padding:5px 8px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:.15s;
+    padding:5px 9px;border-radius:8px;cursor:pointer;text-transform:uppercase;transition:.15s;
   }
   .langs button:hover{color:var(--text);border-color:var(--muted)}
-  .langs button.active{background:var(--tape);color:#000;border-color:var(--tape)}
+  .langs button.active{background:var(--green);color:#0a0a09;border-color:var(--green)}
 
   /* ---------- police tape (signature) ---------- */
   .tape{
@@ -75,16 +75,16 @@
   .stage{flex:1;display:flex;flex-direction:column;justify-content:center}
 
   /* ---------- intro ---------- */
-  .intro-tape{margin-bottom:22px}
+  .intro-tape{display:none}
   h1{
     font-family:"Oswald";font-weight:700;text-transform:uppercase;line-height:.98;
     font-size:clamp(34px,9vw,58px);letter-spacing:.01em;margin:6px 0 4px;
   }
-  h1 .y{color:var(--tape)}
+  h1 .y{color:var(--green)}
   .kicker{font-family:"Caveat";font-weight:700;color:var(--green);font-size:26px;line-height:1;margin-bottom:18px;transform:rotate(-2deg)}
   .lead{color:var(--text);opacity:.86;font-size:16px;max-width:48ch;margin-bottom:14px}
-  .sig{font-family:"Caveat";font-weight:700;color:var(--tape);font-size:23px;transform:rotate(-1.5deg);margin:0 0 26px;text-align:right;max-width:48ch}
-  .hahnke-note{font-family:"Open Sans";font-style:italic;font-size:14.5px;line-height:1.5;color:var(--text);opacity:.92;border-left:3px solid var(--tape);background:rgba(245,220,36,.05);padding:11px 13px;border-radius:4px;margin:22px 0 2px}
+  .sig{font-family:"Caveat";font-weight:700;color:var(--green);font-size:23px;transform:rotate(-1.5deg);margin:0 0 26px;text-align:right;max-width:48ch}
+  .hahnke-note{font-family:"Open Sans";font-style:italic;font-size:14.5px;line-height:1.5;color:var(--text);opacity:.92;border-left:3px solid var(--green);background:rgba(180,220,65,.06);padding:11px 13px;border-radius:4px;margin:22px 0 2px}
   .meta{font-family:"Oswald";font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--muted);margin-bottom:30px}
   .intro-photo{position:relative;margin:26px -20px -22px;height:230px;border-radius:0 0 7px 7px;overflow:hidden;background:#0c0b09 url('img/intro-foto.jpg') center 40%/cover no-repeat}
   .intro-photo::before{content:"";position:absolute;left:0;right:0;top:-9px;height:26px;background:url('img/paper-rip.png') center/100% 100% no-repeat}
@@ -92,18 +92,18 @@
 
   .btn{
     font-family:"Oswald";font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:16px;
-    background:var(--tape);color:#000;border:none;padding:15px 26px;border-radius:5px;cursor:pointer;
-    transition:transform .12s, box-shadow .12s, background .15s;box-shadow:0 6px 0 #b9a614;
+    background:var(--green);color:#0a0a09;border:none;padding:15px 28px;border-radius:999px;cursor:pointer;
+    transition:transform .12s, box-shadow .12s, background .15s, filter .15s;box-shadow:0 6px 16px rgba(0,0,0,.35);
   }
-  .btn:hover{transform:translateY(-1px)}
-  .btn:active{transform:translateY(3px);box-shadow:0 3px 0 #b9a614}
+  .btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
+  .btn:active{transform:translateY(1px);box-shadow:0 3px 10px rgba(0,0,0,.3)}
   .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--muted);box-shadow:none}
-  .btn.ghost:hover{border-color:var(--green);color:var(--green)}
-  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:0 6px 0 #b9a614}
+  .btn.ghost:hover{border-color:var(--green);color:var(--green);filter:none}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:0 6px 16px rgba(0,0,0,.25)}
 
   /* ---------- quiz ---------- */
   .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-  .qcount{font-family:"Oswald";font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--tape);white-space:nowrap}
+  .qcount{font-family:"Oswald";font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--green);white-space:nowrap}
   .bar{flex:1;height:8px;background:rgba(245,240,210,.1);border-radius:99px;overflow:hidden}
   .bar > i{display:block;height:100%;width:0;background:var(--green);transition:width .35s ease}
   .qno{font-family:"Caveat";font-weight:700;color:var(--muted);font-size:20px;transform:rotate(-3deg);margin:14px 0 2px}
@@ -111,7 +111,7 @@
   .opts{display:flex;flex-direction:column;gap:11px}
   .opt{
     text-align:left;background:#100f0d;border:1px solid var(--line);border-left:4px solid var(--cork);
-    color:var(--text);font-family:"Open Sans";font-size:15.5px;padding:14px 16px;border-radius:6px;cursor:pointer;
+    color:var(--text);font-family:"Open Sans";font-size:15.5px;padding:14px 16px;border-radius:11px;cursor:pointer;
     transition:.14s;display:flex;gap:12px;align-items:flex-start;
   }
   .opt:hover{border-color:var(--muted);background:#16140f}
@@ -159,7 +159,7 @@
   .casecard .ct-text{flex:1;min-width:0}
   .casecard .ct-img{width:104px;flex:0 0 auto;height:auto;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.35);background:#e4ded0}
   @media (max-width:420px){ .casecard .ct-img{width:82px} }
-  .casecard .alt-btn{margin-top:14px;font-family:"Oswald";font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px;background:transparent;border:1px solid rgba(28,26,21,.4);color:#1c1a15;padding:7px 12px;border-radius:4px;cursor:pointer;transition:.14s}
+  .casecard .alt-btn{margin-top:14px;font-family:"Oswald";font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px;background:transparent;border:1px solid rgba(28,26,21,.45);color:#1c1a15;padding:7px 14px;border-radius:999px;cursor:pointer;transition:.14s}
   .casecard .alt-btn:hover{background:rgba(28,26,21,.08);border-color:#1c1a15}
   .photo-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px}
   .photo-hint{font-family:"Open Sans";font-size:12.5px;color:var(--muted);text-align:center;margin-top:8px}
@@ -172,8 +172,8 @@
   #cardPreview.ready{opacity:1}
   .res-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
   .buy-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
-  .btn.buy{background:var(--green);color:#0a0a09;box-shadow:0 6px 0 #7a9a22;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-  .btn.buy:active{transform:translateY(3px);box-shadow:0 3px 0 #7a9a22}
+  .btn.buy{background:var(--green);color:#0a0a09;box-shadow:0 6px 16px rgba(0,0,0,.3);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn.buy:active{transform:translateY(1px);box-shadow:0 3px 10px rgba(0,0,0,.25)}
   .btn.buy.ghost{background:transparent;color:var(--green);border:1px solid var(--green);box-shadow:none}
   .copied{font-family:"Caveat";font-weight:700;color:var(--green);font-size:18px;align-self:center;display:none}
   .copied.show{display:inline}
@@ -1063,7 +1063,7 @@ async function buildCard(t, portraitSrcUrl){
 
   // Footer
   const by=H-186;x.textAlign="center";
-  x.fillStyle=YEL;x.font="700 40px Oswald";_spc(x,"1px");x.fillText(BRAND.hashtag,W/2,by);_spc(x,"0px");
+  x.fillStyle=GRN;x.font="700 40px Oswald";_spc(x,"1px");x.fillText(BRAND.hashtag,W/2,by);_spc(x,"0px");
   x.fillStyle="#9a958a";x.font="400 26px 'Open Sans'";
   x.fillText((L().cardCta||"")+" "+BRAND.url+"  \u00b7  "+igHandle(lang),W/2,by+44);
   // Logo (weiß, Originalproportionen) — sonst Platzhalter
