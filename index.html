@@ -939,14 +939,14 @@ function loadLogo(){return new Promise(res=>{if(!LOGO_DATA){res(null);return;}co
    reiner Persönlichkeitstest ohne Kauf). shopDe = eigener Online-Shop, nur DE.
    TODO Francis: shopDe-Deeplinks je Fall ergänzen (zeigt aktuell auf Startseite). */
 const BUY = {
-  1:  { amazon:{de:"https://www.amazon.de/dp/B0CHFFSQXD", en:"", it:"https://www.amazon.it/dp/B0F8BTZCKY", fr:"https://www.amazon.fr/dp/B0FN4NGBMD", es:"https://www.amazon.es/dp/B0FN4KM9D5"}, shopDe:"https://hidden.games" }, // F8 Tödliche Überfahrt
-  2:  { amazon:{de:"https://www.amazon.de/dp/B0BGJ61D76", en:"", it:"https://www.amazon.it/dp/B0D14TQTVL", fr:"https://www.amazon.fr/dp/B0DK3V83Q9", es:"https://www.amazon.es/dp/B0DK3TZWB2"}, shopDe:"https://hidden.games" }, // F9 Ein perfekter Plan
-  3:  { amazon:{de:"https://www.amazon.de/dp/B09GR85FG9", en:"", it:"https://www.amazon.it/dp/B0DGV5Y7LT", fr:"https://www.amazon.fr/dp/B0FN4P733D", es:""}, shopDe:"https://hidden.games" }, // F6 Eiskaltes Verbrechen (Nagel) · ES n/v → ES remappt Typ3→Fall2
-  4:  { amazon:{de:"https://www.amazon.de/dp/B08HJ1VK25", en:"https://www.amazon.com/dp/B0DNZF7QYQ", it:"https://www.amazon.it/dp/B0B7RN4XQH", fr:"https://www.amazon.fr/dp/B0B7RN3GFL", es:"https://www.amazon.es/dp/B0B7RN66FB"}, shopDe:"https://hidden.games" }, // F3 Grünes Gift (Lievers)
-  5:  { amazon:{de:"https://www.amazon.de/dp/B08C42MPV4", en:"https://www.amazon.com/dp/B09FYLJYQM", it:"https://www.amazon.it/dp/B09KXXF2RY", fr:"https://www.amazon.fr/dp/B09KY1R61C", es:"https://www.amazon.es/dp/B09KXZDBFS"}, shopDe:"https://hidden.games" }, // F2 Das Diadem der Madonna
-  6:  { amazon:{de:"https://www.amazon.de/dp/B0FNN7N576", en:"", it:"", fr:"", es:""}, shopDe:"https://hidden.games" }, // F16 Glutspur · nur DE verfügbar → IT/FR/ES remappen Typ6→Fall4
-  7:  { amazon:{de:"https://www.amazon.de/dp/B0FNN85CDH", en:"", it:"", fr:"", es:""}, shopDe:"https://hidden.games" }, // F14 Schatten der Zeit · nur DE verfügbar → IT/FR/ES remappen Typ7→Fall1
-  rex:{ amazon:{de:"https://www.amazon.de/dp/B0BGJ8DD6V", en:"", it:"https://www.amazon.it/dp/B0DGV8M3KH", fr:"https://www.amazon.fr/dp/B0DK3Q7MQB", es:"https://www.amazon.es/dp/B0DNZPCQPH"}, shopDe:"https://hidden.games" }, // F11 Reif für die Insel
+  1:  { amazon:{de:"https://www.amazon.de/dp/B0CHFFSQXD", en:"", it:"https://www.amazon.it/dp/B0F8BTZCKY", fr:"https://www.amazon.fr/dp/B0FN4NGBMD", es:"https://www.amazon.es/dp/B0FN4KM9D5"}, shopDe:"https://www.hidden.games/produkt/toedliche-ueberfahrt/" }, // F8 Tödliche Überfahrt
+  2:  { amazon:{de:"https://www.amazon.de/dp/B0BGJ61D76", en:"", it:"https://www.amazon.it/dp/B0D14TQTVL", fr:"https://www.amazon.fr/dp/B0DK3V83Q9", es:"https://www.amazon.es/dp/B0DK3TZWB2"}, shopDe:"https://www.hidden.games/produkt/ein-perfekter-plan/" }, // F9 Ein perfekter Plan
+  3:  { amazon:{de:"https://www.amazon.de/dp/B09GR85FG9", en:"", it:"https://www.amazon.it/dp/B0DGV5Y7LT", fr:"https://www.amazon.fr/dp/B0FN4P733D", es:""}, shopDe:"https://www.hidden.games/produkt/eiskaltes-verbrechen-krimispiel/" }, // F6 Eiskaltes Verbrechen (Nagel) · ES n/v → ES remappt Typ3→Fall2
+  4:  { amazon:{de:"https://www.amazon.de/dp/B08HJ1VK25", en:"https://www.amazon.com/dp/B0DNZF7QYQ", it:"https://www.amazon.it/dp/B0B7RN4XQH", fr:"https://www.amazon.fr/dp/B0B7RN3GFL", es:"https://www.amazon.es/dp/B0B7RN66FB"}, shopDe:"https://www.hidden.games/produkt/gruenes-gift/" }, // F3 Grünes Gift (Lievers)
+  5:  { amazon:{de:"https://www.amazon.de/dp/B08C42MPV4", en:"https://www.amazon.com/dp/B09FYLJYQM", it:"https://www.amazon.it/dp/B09KXXF2RY", fr:"https://www.amazon.fr/dp/B09KY1R61C", es:"https://www.amazon.es/dp/B09KXZDBFS"}, shopDe:"https://www.hidden.games/produkt/das-diadem-der-madonna/" }, // F2 Das Diadem der Madonna
+  6:  { amazon:{de:"https://www.amazon.de/dp/B0FNN7N576", en:"", it:"", fr:"", es:""}, shopDe:"https://www.hidden.games/produkt/glutspur-krimispiel/" }, // F16 Glutspur · nur DE verfügbar → IT/FR/ES remappen Typ6→Fall4
+  7:  { amazon:{de:"https://www.amazon.de/dp/B0FNN85CDH", en:"", it:"", fr:"", es:""}, shopDe:"https://www.hidden.games/produkt/schatten-der-zeit-krimispiel/" }, // F14 Schatten der Zeit · nur DE verfügbar → IT/FR/ES remappen Typ7→Fall1
+  rex:{ amazon:{de:"https://www.amazon.de/dp/B0BGJ8DD6V", en:"", it:"https://www.amazon.it/dp/B0DGV8M3KH", fr:"https://www.amazon.fr/dp/B0DK3Q7MQB", es:"https://www.amazon.es/dp/B0DNZPCQPH"}, shopDe:"https://www.hidden.games/produkt/reif-fuer-die-insel/" }, // F11 Reif für die Insel
 };
 
 /* Märkte mit Fallempfehlung + Kauf-Buttons. Englisch bleibt bewusst draußen
@@ -962,6 +962,48 @@ const REC = {
   fr: { 6:4, 7:1 },       // Glutspur→La mort en vert · Schatten der Zeit→Traversée mortelle
   es: { 3:2, 6:4, 7:1 },  // Eiskaltes Verbr.(bald)→Un plan perfecto · Glutspur→Una solución venenosa · Schatten der Zeit→Una travesía fatal
 };
+
+/* Weitere Tatort-Spiele ohne festen Ermittlertyp – erscheinen als "Schon gespielt"-Alternativen,
+   je Markt nur wo auf Amazon verfügbar (amazon[lang] gesetzt). Shop-Deeplinks nur DE. */
+const EXTRA_GAMES = {
+  f1:{ img:"img/spielf1.jpg", shopDe:"https://www.hidden.games/produkt/hidden-games-tatort-fall-1-der-fall-klein-borstelheim/",
+       amazon:{de:"https://www.amazon.de/dp/B07XB8L63L", it:"https://www.amazon.it/dp/B092497173", fr:"https://www.amazon.fr/dp/B0924BSJ9Z", es:"https://www.amazon.es/dp/B08KDM3PDK"},
+       title:{de:"Der Fall Klein-Borstelheim", it:"Il caso di Villasetia", fr:"L'Affaire Bourg-le-petit", es:"El Crimen de Quintana de la Matanza"},
+       blurb:{de:"Ein Toter auf dem Schützenfest von Klein-Borstelheim. Beweise sichten, Verdächtige verhören, online recherchieren – der Klassiker, mit dem alles begann.",
+              it:"Un morto alla festa di paese di Villasetia: prove, interrogatori e ricerche online per smascherare l'assassino. Il caso con cui tutto è cominciato.",
+              fr:"Un mort à la fête du village : indices, interrogatoires et recherches en ligne pour démasquer le coupable. L'affaire qui a tout déclenché.",
+              es:"Un muerto en la fiesta del pueblo: reúne pruebas, interroga a los sospechosos e investiga online para desenmascarar al asesino. El caso con el que empezó todo."} },
+  f4:{ img:"img/spielf4.jpg", shopDe:"https://www.hidden.games/produkt/ein-drahtseilakt/",
+       amazon:{de:"https://www.amazon.de/dp/B08KDMWHLV", it:"https://www.amazon.it/dp/B0C4TXHL59", fr:"https://www.amazon.fr/dp/B0CN34FNKP", es:"https://www.amazon.es/dp/B0D14RL21M"},
+       title:{de:"Ein Drahtseilakt", it:"In bilico su un filo", fr:"Sur le fil", es:"Bailando sobre la Cuerda Floja"},
+       blurb:{de:"Im Zirkus Monelli stürzt eine Seiltänzerin in die Tiefe – Unfall oder Mord? Hinter der glitzernden Manege warten dunkle Geheimnisse.",
+              it:"Al circo Monelli un'equilibrista precipita nel vuoto: incidente o delitto? Dietro la pista scintillante si nascondono oscuri segreti.",
+              fr:"Au cirque Monelli, une funambule fait une chute mortelle : accident ou crime ? Derrière les paillettes se cachent de sombres secrets.",
+              es:"En el circo Monelli, una equilibrista cae al vacío: ¿accidente o asesinato? Tras la pista brillante se esconden secretos muy oscuros."} },
+  f5:{ img:"img/spielf5.jpg", shopDe:"https://www.hidden.games/produkt/koenigsmord/",
+       amazon:{de:"https://www.amazon.de/dp/B09GRRX6K3", it:"https://www.amazon.it/dp/B0D14VBPHX", fr:"https://www.amazon.fr/dp/B0D14VCNLR", es:"https://www.amazon.es/dp/B0DK248ZCZ"},
+       title:{de:"Königsmord", it:"Morte di un Re", fr:"Le Roy est mort", es:"Crimen en la Familia Regio"},
+       blurb:{de:"Ein Fest auf dem Landsitz der Familie König endet tödlich. Steckt der Mörder in der eigenen Familie? Ermittelt mit Kommissar Hahnke.",
+              it:"Una festa nella tenuta della famiglia finisce in tragedia. L'assassino si nasconde tra i parenti? Si indaga con il commissario.",
+              fr:"Une fête dans le domaine familial tourne au drame. Le meurtrier se cache-t-il dans la famille ? Enquête aux côtés du commissaire.",
+              es:"Una fiesta en la finca familiar acaba en muerte. ¿El asesino está en la propia familia? A investigar con el comisario."} },
+  f12:{ img:"img/spielf12.jpg", shopDe:"https://www.hidden.games/produkt/campingkiller/",
+       amazon:{de:"https://www.amazon.de/dp/B0DCZV7PH6", it:"https://www.amazon.it/dp/B0FN4JSM4H"},
+       title:{de:"Campingkiller", it:"Il killer del campeggio"},
+       blurb:{de:"Auf dem Campingplatz Seeblick wird die Besitzerin ermordet – verdächtig sind die zerstrittenen Dauercamper. Wer hat seine Drohung wahr gemacht?",
+              it:"Al campeggio la proprietaria viene uccisa: sospettati i campeggiatori fissi con cui era in lite. Chi ha messo in atto le sue minacce?"} },
+  f13:{ img:"img/spielf13.jpg", shopDe:"https://www.hidden.games/produkt/alle-unter-einem-dach/",
+       amazon:{de:"https://www.amazon.de/dp/B0DCW8WVGK", it:"https://www.amazon.it/dp/B0F1N529F1", es:"https://www.amazon.es/dp/B0FBMGC2TB"},
+       title:{de:"Alle unter einem Dach", it:"Sotto lo stesso tetto", es:"Bajo el Mismo Techo"},
+       blurb:{de:"Ein alter Mann liegt tot in seinem Mehrfamilienhaus. Durchsuche die Wohnungen, verhöre die Nachbarn – welcher Hausbewohner ist schuldig?",
+              it:"Un anziano viene trovato morto nel suo condominio. Perquisisci gli appartamenti, interroga i vicini: quale inquilino è colpevole?",
+              es:"Un anciano aparece muerto en su edificio de viviendas. Registra los pisos, interroga a los vecinos: ¿qué inquilino es culpable?"} },
+  sek:{ img:"img/spielsek.jpg", shopDe:"https://www.hidden.games/produkt/special-edition-krimispiel/",
+       amazon:{de:"https://www.amazon.de/dp/B0FQCHZQY9"},
+       title:{de:"In den Fängen des Bösen"},
+       blurb:{de:"Eine brutale Entführung, ein Täter, der die Polizei im Radio verhöhnt. 24 Episoden, echte Beweise und digitale Spuren – die große Sonderedition."} },
+};
+const EXTRA_ORDER = ["f1","f4","f5","f12","f13","sek"];
 let _result=null, _cardBlob=null, _userPhoto=null;
 let _caseCycle=[], _caseIdx=0;
 
@@ -1217,35 +1259,48 @@ function rankedKeys(){
 }
 /* Fall-Empfehlungs-Zyklus: Ranked Types → Fälle (REC-Remap pro Markt), Duplikate raus.
    Erster Eintrag = beste Empfehlung; weitere = Alternativen für "Schon gespielt". */
+/* Normalisiertes Spiel-Objekt für die Fall-Karte: aus bestehendem Typ-Fall ... */
+function gameFromType(caseKey){
+  const cs=(String(caseKey)==="rex")?C().cases.rex:C().cases[caseKey];
+  const buy=BUY[caseKey]||{};
+  return { key:String(caseKey), title:cs.title, blurb:cs.blurb,
+           amazon:(buy.amazon||{})[lang]||"", shopDe:buy.shopDe||"", img:caseImgSrc(caseKey) };
+}
+/* ... oder aus dem Zusatzkatalog (EXTRA_GAMES, ohne festen Typ). */
+function gameFromExtra(id){
+  const g=EXTRA_GAMES[id];
+  return { key:id, title:(g.title[lang]||g.title.de), blurb:(g.blurb[lang]||g.blurb.de),
+           amazon:(g.amazon||{})[lang]||"", shopDe:g.shopDe||"", img:g.img };
+}
+/* Fall-Empfehlungs-Zyklus: erst die typ-passenden Fälle (REC-Remap, dedupliziert), dann
+   alle weiteren im Markt verfügbaren Tatort-Spiele. Liefert normalisierte Spiel-Objekte. */
 function caseCycleFor(){
-  const seen=new Set(), cyc=[];
+  const out=[], seen=new Set();
+  const add=g=>{ if(g && !seen.has(g.key)){ seen.add(g.key); out.push(g); } };
   rankedKeys().forEach(k=>{
     const rk=(REC[lang] && REC[lang][k]!=null) ? REC[lang][k] : k;
-    const ck=String(rk);
-    if(!seen.has(ck)){ seen.add(ck); cyc.push(rk); }
+    add(gameFromType(rk));
   });
-  return cyc;
+  EXTRA_ORDER.forEach(id=>{ const g=gameFromExtra(id); if(g.amazon) add(g); });
+  return out;
 }
-/* Füllt die Fall-Karte (Label/Ribbon/Titel/Blurb/Keyvisual/Kauf-Buttons) für einen Fall-Schlüssel. */
-function renderCase(caseKey, isAlt){
-  const cs = (String(caseKey)==="rex") ? C().cases.rex : C().cases[caseKey];
+/* Füllt die Fall-Karte (Label/Ribbon/Titel/Blurb/Keyvisual/Kauf-Buttons) aus einem Spiel-Objekt. */
+function renderCase(game, isAlt){
   $("caseLabel").textContent = isAlt ? (L().altLabel||L().caseLabel) : L().caseLabel;
   $("caseRibbon").textContent = isAlt ? (L().altRibbon||L().caseRibbon) : L().caseRibbon;
-  $("caseTitle").textContent = cs.title;
-  $("caseBlurb").textContent = cs.blurb;
-  const buy = BUY[caseKey] || {};
-  const amzn = (buy.amazon||{})[lang] || "";
+  $("caseTitle").textContent = game.title;
+  $("caseBlurb").textContent = game.blurb;
   let bhtml = "";
-  if(amzn) bhtml += '<a class="btn buy" href="'+amzn+'" target="_blank" rel="noopener">🛒 '+(L().amazonBtn||"Amazon")+'</a>';
-  if(lang==="de" && buy.shopDe) bhtml += '<a class="btn buy ghost" href="'+buy.shopDe+'" target="_blank" rel="noopener">'+(L().shopBtn||"Shop")+'</a>';
+  if(game.amazon) bhtml += '<a class="btn buy" href="'+game.amazon+'" target="_blank" rel="noopener">🛒 '+(L().amazonBtn||"Amazon")+'</a>';
+  if(lang==="de" && game.shopDe) bhtml += '<a class="btn buy ghost" href="'+game.shopDe+'" target="_blank" rel="noopener">'+(L().shopBtn||"Shop")+'</a>';
   $("buyActions").innerHTML = bhtml;
   const cimg=$("caseImg"); cimg.hidden=true;
-  cimg.alt=cs.title;
+  cimg.alt=game.title;
   cimg.onload=()=>{ cimg.hidden=false; };
   cimg.onerror=()=>{ cimg.hidden=true; };
-  cimg.src=caseImgSrc(caseKey);
+  cimg.src=game.img;
 }
-/* "Das kenne ich schon" → nächsten Fall im Zyklus zeigen (springt am Ende zurück zur Empfehlung). */
+/* "Das kenne ich schon" → nächstes Spiel im Zyklus zeigen (springt am Ende zurück zur Empfehlung). */
 function showNextCase(){
   if(_caseCycle.length<2) return;
   _caseIdx=(_caseIdx+1)%_caseCycle.length;
